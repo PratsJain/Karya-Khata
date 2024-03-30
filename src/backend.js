@@ -42,7 +42,8 @@ function project(Title) {
     const getId = () => id;
     const getTitle = () => title;
     const setTitle = (heading) => { title = heading };
-    const addToDo = (todo_item) => {
+    const addToDo = (heading, desc, notes, duedate, prior, status) => {
+        const todo_item = toDo(heading, desc, duedate, prior, notes, status);
         toDos[todo_item.getId()] = todo_item;
     };
     const removeToDo = (todoId) => {
@@ -129,7 +130,109 @@ function storageAvailable(type) {
 
 
 
-function backendUser() {
+export default function backendUser() {
+    let name;
+    const projects = {};
+    let isData = false;
+    const loadData = () => {
+        if (storageAvailable('localStorage') && localStorage.getItem("user")) {
+            isData = true;
+            console.log("Data found: \n", JSON.parse(localStorage.getItem("user")));
+        }
+    };
+    loadData();
 
+    const getData = () => {
+        const pro2 = [];
+        for (let key in projects) {
+            if (projects.hasOwnProperty(key)) {
+                pro2.push(projects[key].stringify());
+            }
+        }
+        return { name, pro2 };
+    };
+
+    const stringify = () => {
+        return JSON.stringify(getData());
+    };
+
+    const saveData = () => {
+        localStorage.setItem("user", stringify());
+    };
+
+    const setName = (Name) => {
+        name = Name;
+        saveData();
+    };
+
+    const getName = () => name;
+    const getisData = () => isData;
+    const addProject = (Title) => {
+        const p1 = project(Title);
+        projects[p1.getId()] = p1;
+        saveData();
+        return p1.getId();
+    };
+    const updateProject = (Title, pID) => {
+        if (projects.hasOwnProperty(pID)) {
+            projects[pID].setTitle(Title);
+            saveData();
+        }
+    }
+
+    const removeProject = (pID) => {
+        if (projects.hasOwnProperty(pID)) {
+            delete projects[pID];
+            saveData();
+        }
+    };
+
+    const getProject = (pID) => {
+        if (projects.hasOwnProperty(pID)) {
+            const {getTitle, getId, getTodo, getTodoAll} = projects[pID];
+            return {getTitle, getId, getTodo, getTodoAll};
+        }
+    };
+
+    const getProjectAll = () => {
+        const res = [];
+        for (let key in projects) {
+            if (projects.hasOwnProperty(key)) {
+                let {getTitle, getId, getTodo, getTodoAll} = projects[key];
+                res.push({getTitle, getId, getTodo, getTodoAll});
+            }
+        }
+        return res;
+    };
+
+    const addTodo = (pID, heading, desc, notes, duedate, prior, status=false) => {
+        if(projects.hasOwnProperty(pID)) {
+            projects[pID].addToDo(heading, desc, notes, duedate, prior, status);
+            saveData();
+        }
+    };
+
+    const updateTodo = (pID, todoId, heading, desc, notes, duedate, prior, status=false) => {
+        if(projects.hasOwnProperty(pID)) {
+            projects[pID].updateTodo(todoId, heading, desc, notes, duedate, prior, status);
+            saveData();
+        }
+    };
+
+    const toggleTodo = (pID, todoId, status) => {
+        if(projects.hasOwnProperty(pID)) {
+            projects[pID].toggleStatus(todoId, status);
+            saveData();
+        }
+    };
+
+    const remTodo = (pID, todoId) => {
+        if(projects.hasOwnProperty(pID)) {
+            projects[pID].removeToDo(todoId);
+            saveData();
+        }
+    };
+
+    return {setName, getName, getisData, addProject, removeProject, updateProject, getProject, getProjectAll, addTodo, updateTodo, toggleTodo, remTodo};
 }
 

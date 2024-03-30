@@ -1,4 +1,4 @@
-import toDo from './toDo.js';
+import User from './backend.js';
 
 console.log("Welcome to Karya-Khata!!")
 
@@ -25,11 +25,13 @@ console.log("Welcome to Karya-Khata!!")
 // }
 
 // console.log(JSON.stringify(toDo()));
-arb = []
-let todoItem = toDo("Exercise", "2 Sets of Squats and Push-ups each.", "2023-1-11", 2, "Nothing");
-arb.push(todoItem);
-todoItem = toDo("Dinner", "2 Sets of Squats and Push-ups each.", "2023-1-11", 2, "Nothing");
-arb.push(todoItem);
-todoItem.setDesc("Pizza and Pasta!")
+// arb = []
+// let todoItem = toDo("Exercise", "2 Sets of Squats and Push-ups each.", "2023-1-11", 2, "Nothing");
+// arb.push(todoItem);
+// todoItem = toDo("Dinner", "2 Sets of Squats and Push-ups each.", "2023-1-11", 2, "Nothing");
+// arb.push(todoItem);
+// todoItem.setDesc("Pizza and Pasta!")
 
-console.log("Stringified ToDo", toDo("Exercise", "2 Sets of Squats and Push-ups each.", "2023-1-11", 2, "Nothing").stringify())
+// console.log("Stringified ToDo", toDo("Exercise", "2 Sets of Squats and Push-ups each.", "2023-1-11", 2, "Nothing").stringify())
+
+const user = User();
