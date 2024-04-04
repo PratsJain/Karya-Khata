@@ -35,3 +35,9 @@ console.log("Welcome to Karya-Khata!!")
 // console.log("Stringified ToDo", toDo("Exercise", "2 Sets of Squats and Push-ups each.", "2023-1-11", 2, "Nothing").stringify())
 
 const user = User();
+// user.setName("Prats");
+// const pid = user.addProject("Daily routine");
+// console.log(pid);
+// const tid = user.addTodo(pid, "Squats", "2 Sets of Squats and Push-ups each.", "", "10-10-2024", 1);
+// console.log(tid);
+// console.log(JSON.parse(user.stringify()));

@@ -7,7 +7,7 @@ function getPriCol(pr) {
 
 
 function toDo(Title, Desc, DueDate, Priority, Notes, Status = false) {
-    const id = uuidv4();
+    let id = uuidv4();
     let title = Title, desc = Desc, dueDate = DueDate, priority = Priority, notes = Notes, isDone = Status;
     const setTitle = (tl) => { title = tl };
     const getTitle = () => title;
@@ -25,6 +25,17 @@ function toDo(Title, Desc, DueDate, Priority, Notes, Status = false) {
     const getPriorCol = () => {
         return getPriCol(priority);
     };
+
+    const loadData = (obj) => {
+        const obj2 = JSON.parse(obj);
+        id = obj2.id;
+        title = obj2.title;
+        desc = obj2.desc;
+        dueDate = obj2.dueDate;
+        priority = obj2.priority;
+        notes = obj2.notes;
+        isDone = obj2.isDone;
+    };
     const getData = () => {
         return { id, title, desc, dueDate, priority, notes, isDone };
     };
@@ -32,12 +43,12 @@ function toDo(Title, Desc, DueDate, Priority, Notes, Status = false) {
         return JSON.stringify(getData());
     };
 
-    return { setDesc, setNotes, setPrior, setStatus, setTitle, setdueDate, getdueDate, getDesc, getId, getNotes, getStatus, getTitle, getPrior, getPriorCol, stringify };
+    return { loadData, setDesc, setNotes, setPrior, setStatus, setTitle, setdueDate, getdueDate, getDesc, getId, getNotes, getStatus, getTitle, getPrior, getPriorCol, stringify };
 }
 
 function project(Title) {
     let title = Title;
-    const id = uuidv4();
+    let id = uuidv4();
     const toDos = {};
     const getId = () => id;
     const getTitle = () => title;
@@ -45,10 +56,22 @@ function project(Title) {
     const addToDo = (heading, desc, notes, duedate, prior, status) => {
         const todo_item = toDo(heading, desc, duedate, prior, notes, status);
         toDos[todo_item.getId()] = todo_item;
+        return todo_item.getId();
     };
     const removeToDo = (todoId) => {
         if (toDos.hasOwnProperty(todoId)) {
             delete toDos[todoId];
+        }
+    };
+
+    const loadData = (obj) => {
+        const obj2 = JSON.parse(obj);
+        title = obj2.title;
+        id = obj2.id;
+        for (let todo_item of obj2.toDos2) {
+            const todoItem = toDo("", "", "", -1, "");
+            todoItem.loadData(todo_item);
+            toDos[todoItem.getId()] = todoItem;
         }
     };
     const updateTodo = (todoId, heading, desc, notes, duedate, prior, status) => {
@@ -97,7 +120,7 @@ function project(Title) {
         return JSON.stringify(getData());
     };
 
-    return { getTitle, getId, getTodo, getTodoAll, stringify, updateTodo, removeToDo, addToDo, toggleStatus, setTitle };
+    return { loadData, getTitle, getId, getTodo, getTodoAll, stringify, updateTodo, removeToDo, addToDo, toggleStatus, setTitle };
 }
 
 
@@ -134,13 +157,21 @@ export default function backendUser() {
     let name;
     const projects = {};
     let isData = false;
-    const loadData = () => {
-        if (storageAvailable('localStorage') && localStorage.getItem("user")) {
-            isData = true;
-            console.log("Data found: \n", JSON.parse(localStorage.getItem("user")));
-        }
-    };
-    loadData();
+    // const loadData = () => {
+    //     if (storageAvailable('localStorage') && localStorage.getItem("user")) {
+    //         isData = true;
+    //         const stor = JSON.parse(localStorage.getItem("user"));
+    //         name = stor['name'];
+    //         for (let pro of stor['pro2']) {
+    //             const proj = project("");
+    //             proj.loadData(pro);
+    //             projects[proj.getId()] = proj;
+    //             // console.log(JSON.parse(pro)['title']);
+    //         }
+    //         console.log("Data found: \n", stor === stringify());
+    //     }
+    // };
+    // loadData();
 
     const getData = () => {
         const pro2 = [];
@@ -189,8 +220,8 @@ export default function backendUser() {
 
     const getProject = (pID) => {
         if (projects.hasOwnProperty(pID)) {
-            const {getTitle, getId, getTodo, getTodoAll} = projects[pID];
-            return {getTitle, getId, getTodo, getTodoAll};
+            const { getTitle, getId, getTodo, getTodoAll } = projects[pID];
+            return { getTitle, getId, getTodo, getTodoAll };
         }
     };
 
@@ -198,41 +229,56 @@ export default function backendUser() {
         const res = [];
         for (let key in projects) {
             if (projects.hasOwnProperty(key)) {
-                let {getTitle, getId, getTodo, getTodoAll} = projects[key];
-                res.push({getTitle, getId, getTodo, getTodoAll});
+                let { getTitle, getId, getTodo, getTodoAll } = projects[key];
+                res.push({ getTitle, getId, getTodo, getTodoAll });
             }
         }
         return res;
     };
 
-    const addTodo = (pID, heading, desc, notes, duedate, prior, status=false) => {
-        if(projects.hasOwnProperty(pID)) {
-            projects[pID].addToDo(heading, desc, notes, duedate, prior, status);
+    const addTodo = (pID, heading, desc, notes, duedate, prior, status = false) => {
+        if (projects.hasOwnProperty(pID)) {
+            const tID = projects[pID].addToDo(heading, desc, notes, duedate, prior, status);
             saveData();
+            return tID;
         }
     };
 
-    const updateTodo = (pID, todoId, heading, desc, notes, duedate, prior, status=false) => {
-        if(projects.hasOwnProperty(pID)) {
+    const updateTodo = (pID, todoId, heading, desc, notes, duedate, prior, status = false) => {
+        if (projects.hasOwnProperty(pID)) {
             projects[pID].updateTodo(todoId, heading, desc, notes, duedate, prior, status);
             saveData();
         }
     };
 
     const toggleTodo = (pID, todoId, status) => {
-        if(projects.hasOwnProperty(pID)) {
+        if (projects.hasOwnProperty(pID)) {
             projects[pID].toggleStatus(todoId, status);
             saveData();
         }
     };
 
     const remTodo = (pID, todoId) => {
-        if(projects.hasOwnProperty(pID)) {
+        if (projects.hasOwnProperty(pID)) {
             projects[pID].removeToDo(todoId);
             saveData();
         }
     };
 
-    return {setName, getName, getisData, addProject, removeProject, updateProject, getProject, getProjectAll, addTodo, updateTodo, toggleTodo, remTodo};
+    const loadData = () => {
+        if (storageAvailable('localStorage') && localStorage.getItem("user")) {
+            isData = true;
+            const stor = JSON.parse(localStorage.getItem("user"));
+            name = stor['name'];
+            for (let pro of stor['pro2']) {
+                const proj = project("");
+                proj.loadData(pro);
+                projects[proj.getId()] = proj;
+            }
+            console.log("Data found in localStorage!!");
+        }
+    };
+    loadData();
+    return { setName, getName, getisData, addProject, removeProject, updateProject, getProject, getProjectAll, addTodo, updateTodo, toggleTodo, remTodo, stringify };
 }
 
