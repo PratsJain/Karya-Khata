@@ -1,43 +1,13 @@
 import User from './backend.js';
+import './style.css';
+import man from './assets/man.png';
+import fav from './assets/fav.png';
+import frontend from './frontend.js';
 
-console.log("Welcome to Karya-Khata!!")
+const app = (function ScreenController() {
+    const front = frontend();
+    front.fav_icon(fav);
+    const user = User();
 
+})();
 
-// function getDate() {
-//     // Get the value of the date input field
-//     const dateValue = document.getElementById("date").value;
-
-//     // Log the date value to the console
-//     console.log("Selected Date:", dateValue);
-//     console.log("Type: ", typeof dateValue);
-// }
-
-// document.getElementById("sub").addEventListener("click", getDate);
-// function toDo() {
-//     const title = "Hello Hello";
-//     const gettitle = () => title;
-//     let desc = "Hello guys.";
-//     const setDesc = (descp) => {
-//         desc = descp;
-//     };
-//     const getDesc = () => desc;
-//     return { gettitle, setDesc, getDesc, title, desc};
-// }
-
-// console.log(JSON.stringify(toDo()));
-// arb = []
-// let todoItem = toDo("Exercise", "2 Sets of Squats and Push-ups each.", "2023-1-11", 2, "Nothing");
-// arb.push(todoItem);
-// todoItem = toDo("Dinner", "2 Sets of Squats and Push-ups each.", "2023-1-11", 2, "Nothing");
-// arb.push(todoItem);
-// todoItem.setDesc("Pizza and Pasta!")
-
-// console.log("Stringified ToDo", toDo("Exercise", "2 Sets of Squats and Push-ups each.", "2023-1-11", 2, "Nothing").stringify())
-
-const user = User();
-// user.setName("Prats");
-// const pid = user.addProject("Daily routine");
-// console.log(pid);
-// const tid = user.addTodo(pid, "Squats", "2 Sets of Squats and Push-ups each.", "", "10-10-2024", 1);
-// console.log(tid);
-// console.log(JSON.parse(user.stringify()));

@@ -1,0 +1,40 @@
+:root {
+    --bkg-color: white;
+    --font-size-1: 20px;
+    --font-size-2: 18px;
+    --font-size-3: 15px;
+    --sidebar-bkc: #082f49;
+    --container-level-padding: 40px;
+    --board-bkc: rgb(243, 243, 243);
+}
+
+body {
+    background-color: var(--bkg-color);
+    height: 100vh;
+    margin: 0;
+    /* padding: 10px; */
+    font-family: Roboto, Oxygen, Ubuntu, sans-serif, sans-serif, sans-serif;
+    box-sizing: border-box;
+    font-size: var(--font-size-3);
+}
+
+.container {
+    height: 100%;
+    display: grid;
+    grid-template-columns: 1fr 5fr;
+}
+
+.sidebar {
+    background-color: var(--sidebar-bkc);
+    padding: var(--container-level-padding);
+}
+
+.mainboard {
+    padding: var(--container-level-padding);
+    background-color: var(--board-bkc);
+}
+
+.user-img {
+    height: 40px;
+    width: 40px;
+}
