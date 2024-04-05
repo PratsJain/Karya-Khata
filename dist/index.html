@@ -9,12 +9,35 @@
 <script defer src="index.bundle.js"></script></head>
 
 <body>
+    <div class="backdrop"></div>
     <div class="container">
         <div class="sidebar">
 
         </div>
         <div class="mainboard">
         </div>
+    </div>
+    <div class="popup-modal">
+        <form action="" class="login-form-container">
+            <h2>Sign Up</h2>
+            <div>
+                <label for="fname">
+                    First Name
+                    <!-- <span>Name: </span> -->
+                    <!-- <strong><span aria-label="required">*</span></strong> -->
+                </label>
+                <input type="text" id="fname" name="firstname" required />
+            </div>
+            <div>
+                <label for="lname">
+                    Last Name
+                    <!-- <span>Name: </span> -->
+                    <!-- <strong><span aria-label="required">*</span></strong> -->
+                </label>
+                <input type="text" id="lname" name="lastname" required />
+            </div>
+            <button type="submit" id="login-button">Create</button>
+        </form>
     </div>
 
 </body>
