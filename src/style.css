@@ -3,13 +3,11 @@
     src: url('./assets/font.ttf') format('truetype');
 }
 :root {
-    --bkg-color: white;
     --font-size-1: 20px;
     --font-size-2: 18px;
     --font-size-3: 15px;
     --sidebar-bkc: #082f49;
     --container-level-padding: 20px;
-    --board-bkc: rgb(243, 243, 243);
     --backdrop-col: black;
     --button-border-radius: 30px;
     --input-border-radius: 30px;
@@ -27,6 +25,8 @@
     --peach-col-6: #f43f5e;
     --peach-col-7: #e11d48;
     --peach-col-8: #be123c; 
+    --bkg-color: var(--peach-col-2);
+    --board-bkc: var(--peach-col-1);
 }
 
 * {
@@ -113,6 +113,7 @@ input:focus {
 
 button {
     appearance: none;
+    font: inherit;
     width: 100%;
     height: 2rem;
     margin-top: 20px;
@@ -123,6 +124,9 @@ button {
     box-shadow: none;
 }
 
+button:hover {
+    cursor: pointer;
+}
 
 .backdrop.show {
     opacity: 30%;
@@ -155,13 +159,14 @@ button {
 
 .sidebar {
     background-color: var(--sidebar-bkc);
+    color: var(--sidebar-font-color);
     padding: var(--container-level-padding);
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    /* align-items: center; */
 }
 
-.mainboard {
-    padding: var(--container-level-padding);
-    background-color: var(--board-bkc);
-}
 
 .user-image {
     height: 40px;
@@ -170,7 +175,6 @@ button {
 
 .name-card {
     display: flex;
-    color: var(--sidebar-font-color);
     cursor: pointer;
     gap: 20px;
     align-items: center;
@@ -181,7 +185,8 @@ button {
 }
 
 .name-card:hover {
-    border: 2px solid var(--peach-col-1);
+    border: 2px solid var(--peach-col-5);
+    color: var(--peach-col-5);
 }
 
 
@@ -197,4 +202,48 @@ button {
     100% {
         transform: translateX(0);
     }
+}
+
+.create-pro {
+    width: 80%;
+    padding: 20px;
+    box-sizing: border-box;
+    font-size: var(--font-size-2);
+    border-radius: var(--button-border-radius);
+    border: 2px solid var(--peach-col-3);
+    color: var(--peach-col-3);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.user-projects {
+    display: grid;
+    grid-template-columns: 30px auto;
+    grid-template-rows: repeat(auto-fill, 30px);
+    padding-left: 10px;
+    font-size: var(--font-size-2);
+    gap: 10px;
+}
+
+.sidebar-widget {
+    grid-column: 1 / 3;
+    display: grid;
+    grid-template-columns: subgrid;
+    align-items:center;
+    transition: transform 300ms ease-in-out;
+}
+
+.sidebar-widget:hover {
+    color: var(--peach-col-5);
+    cursor: pointer;
+    transform: translateX(10px);
+}
+.icon {
+    height: 30px;
+    width: 30px;
+    filter: invert(1);
+}
+.mainboard {
+    padding: var(--container-level-padding);
+    background-color: var(--board-bkc);
 }
