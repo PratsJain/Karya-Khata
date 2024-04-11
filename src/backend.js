@@ -157,21 +157,6 @@ export default function backendUser() {
     let name;
     const projects = {};
     let isData = false;
-    // const loadData = () => {
-    //     if (storageAvailable('localStorage') && localStorage.getItem("user")) {
-    //         isData = true;
-    //         const stor = JSON.parse(localStorage.getItem("user"));
-    //         name = stor['name'];
-    //         for (let pro of stor['pro2']) {
-    //             const proj = project("");
-    //             proj.loadData(pro);
-    //             projects[proj.getId()] = proj;
-    //             // console.log(JSON.parse(pro)['title']);
-    //         }
-    //         console.log("Data found: \n", stor === stringify());
-    //     }
-    // };
-    // loadData();
 
     const getData = () => {
         const pro2 = [];

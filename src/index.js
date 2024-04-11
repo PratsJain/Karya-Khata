@@ -1,6 +1,5 @@
 import User from './backend.js';
 import './style.css';
-import man from './assets/man.png';
 import fav from './assets/fav.png';
 import frontend from './frontend.js';
 
@@ -21,6 +20,6 @@ const app = (function ScreenController() {
         document.querySelector('.popup-modal').classList.toggle("show");
         front.updateName(userName);
     });
-    front.renderSidebar(user, man);
+    front.renderSidebar(user);
 })();
 
