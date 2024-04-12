@@ -162,6 +162,8 @@ export default function frontend() {
         todoForm.appendChild(renderInputElement("input", "Desc-" + todoID, "ToDo-Desc", todo.getDesc(), "todo-desc", "Description", "text"));
         todoForm.appendChild(renderInputElement("input", "Date-" + todoID, "ToDo-Date", todo.getdueDate(), "todo-date", "Due Date", "date", true, true));
         todoForm.appendChild(renderInputElement("textarea", "Notes-" + todoID, "ToDo-Notes", todo.getNotes(), "todo-notes", "Notes", null, true, true));
+
+        
         const fieldset = document.createElement("fieldset");
         const legend = document.createElement("legend");
         legend.textContent = "Completion Status";
@@ -265,6 +267,8 @@ export default function frontend() {
         document.querySelector(".content").appendChild(mbitem);
 
     };
+
+
     const renderProject = (user, pID) => {
         const project = user.getProject(pID);
         document.querySelector(".content").innerHTML = "";
@@ -276,6 +280,8 @@ export default function frontend() {
             }
         }
     };
+
+
     const renderProjectName = (pname, cls, pid = null, icon = null) => {
         const sidebar = document.querySelector(".sidebar");
         const pro_items = document.querySelector('.user-projects');

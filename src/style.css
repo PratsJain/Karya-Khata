@@ -392,6 +392,57 @@ button:hover {
     
 }
 
+.todo-status {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+
+input[type='checkbox'] {
+    position: relative;
+    height: 20px;
+    width: 20px;
+    border-radius: 20px;
+    border: 1px solid black;
+    display: inline;
+    background-color: var(--bkg-color);
+    cursor: pointer;
+}
+
+fieldset label {
+    cursor: pointer;
+}
+
+input[type='checkbox']:checked {
+    background-color: green;
+    border: none;
+}
+
+
+/* Style the checkmark icon */
+input[type="checkbox"]::after {
+    content: "✔";
+    display: block;
+    width: 10px;
+    height: 10px;
+    position: absolute;
+    color: white;
+    /* top: 50%; */
+    left: 15%;
+    transform: translate(0%, 0%) scale(0);
+    border-radius: 2px;
+    transition: transform 0.2s ease;
+}
+
+/* Show the checkmark icon when checkbox is checked */
+input[type="checkbox"]:checked::after {
+    transform: translate(0%, 0%) scale(0.8);
+}
+
+
+
+
+
 select, option {
     font: inherit;
     color: var(--font-color);
