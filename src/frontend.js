@@ -45,6 +45,12 @@ export default function frontend() {
 
     };
 
+
+    const getPriCol = (pr) => {
+        const mapping = ["red", "orange", "yellow", "blue", "aqua"];
+        return mapping[pr];
+    }
+
     const loginForm = () => {
         document.querySelector('.backdrop').classList.toggle("show");
         document.querySelector('.popup-modal').classList.toggle("show");
@@ -63,12 +69,61 @@ export default function frontend() {
         }
     };
 
-    const renderInputElement = (elType, id, name, value, cls, label, type = null) => {
-        const divwrap = doc.createElement("div");
+
+    const todoActionsHover = (parent, elements) => {
+        parent.addEventListener("mouseenter", function () {
+            elements.forEach((element) => {
+                element.style.display = "inline";
+            });
+
+        });
+
+        parent.addEventListener("mouseleave", function () {
+            elements.forEach((element) => {
+                element.style.display = "none";
+            });
+        });
+    };
+
+    const editToDo = (todoID, button) => {
+        document.getElementById("Title-" + todoID).disabled = false;
+        document.getElementById("Desc-" + todoID).disabled = false;
+        document.getElementById("Notes-" + todoID).disabled = false;
+        document.getElementById("Date-" + todoID).disabled = false;
+        document.getElementById("Priority-" + todoID).disabled = false;
+        document.getElementById("Title-" + todoID).previousSibling.style.display = "block";
+        document.getElementById("Desc-" + todoID).previousSibling.style.display = "block";
+        button.querySelector("img").src = saveIcon;
+        button.classList.remove("edit-button");
+        button.classList.add("save-button");
+    };
+
+    const saveToDo = (todoID, button) => {
+        document.getElementById("Title-" + todoID).disabled = true;
+        document.getElementById("Desc-" + todoID).disabled = true;
+        document.getElementById("Notes-" + todoID).disabled = true;
+        document.getElementById("Date-" + todoID).disabled = true;
+        document.getElementById("Priority-" + todoID).disabled = true;
+        document.getElementById("Title-" + todoID).previousSibling.style.display = "none";
+        document.getElementById("Desc-" + todoID).previousSibling.style.display = "none";
+        button.querySelector("img").src = editIcon;
+        button.classList.add("edit-button");
+        button.classList.remove("save-button");
+    };
+
+    const remToDo = (todoID) => {
+        const todoDiv = document.querySelector(`.content-item[todoID=${todoID}]`);
+        todoDiv.remove();
+    };
+    const renderInputElement = (elType, id, name, value, cls, label, type = null, isDisable = true, labelDisplay = false) => {
+        const divwrap = document.createElement("div");
         divwrap.classList.add(cls);
         const lbl = document.createElement("label");
         lbl.setAttribute("for", id);
         lbl.textContent = label;
+        if (!labelDisplay) {
+            lbl.style.display = "none";
+        }
         divwrap.appendChild(lbl);
         const inp = document.createElement(elType);
         if (type) {
@@ -76,11 +131,12 @@ export default function frontend() {
         }
         inp.setAttribute("id", id);
         inp.setAttribute("name", name);
-        inp.setAttribute("value", value);
+        inp.value = value;
+        inp.disabled = isDisable;
         divwrap.appendChild(inp);
         return divwrap;
     };
-    const renderTodo = (pID, todo) => {
+    const renderTodo = (pID, todo, isDisable = true) => {
         const todoID = todo.getId();
         const mbitem = document.createElement("div");
         mbitem.classList.add("content-item");
@@ -90,8 +146,8 @@ export default function frontend() {
         todoForm.classList.add("todo-form");
         todoForm.appendChild(renderInputElement("input", "Title-" + todoID, "ToDo-Title", todo.getTitle(), "todo-title", "Title", "text"));
         todoForm.appendChild(renderInputElement("input", "Desc-" + todoID, "ToDo-Desc", todo.getDesc(), "todo-desc", "Description", "text"));
-        todoForm.appendChild(renderInputElement("input", "Date-" + todoID, "ToDo-Date", todo.getdueDate(), "todo-date", "Due Date", "date"));
-        todoForm.appendChild(renderInputElement("textarea", "Notes-" + todoID, "ToDo-Notes", todo.getNotes(), "todo-notes", "Notes"));
+        todoForm.appendChild(renderInputElement("input", "Date-" + todoID, "ToDo-Date", todo.getdueDate(), "todo-date", "Due Date", "date", true, true));
+        todoForm.appendChild(renderInputElement("textarea", "Notes-" + todoID, "ToDo-Notes", todo.getNotes(), "todo-notes", "Notes", null, true, true));
         const fieldset = document.createElement("fieldset");
         const legend = document.createElement("legend");
         legend.textContent = "Completion Status";
@@ -127,7 +183,6 @@ export default function frontend() {
 
         // Create an array of priority options
         const priorityOptions = [
-            "--Please choose an option--",
             "Urgent",
             "Very Important",
             "Important",
@@ -145,36 +200,62 @@ export default function frontend() {
 
         // Append the label and select elements to the todoPriorityDiv
         select.selectedIndex = todo.getPrior() - 1;
-        todoPriorityDiv.appendChild(label);
-        todoPriorityDiv.appendChild(select);
+        select.disabled = isDisable;
+        const selectDiv = document.createElement("div");
+        selectDiv.classList.add("select-container");
+        selectDiv.appendChild(select);
+
+        const priorCol = document.createElement("div");
+        priorCol.classList.add("prior-color");
+        priorCol.style.backgroundColor = getPriCol(parseInt(select.value));
+        
+        select.addEventListener("change", (event) => {
+            priorCol.style.backgroundColor = getPriCol(parseInt(select.value));
+        });
+
+        selectDiv.appendChild(priorCol);
+        todoPriorityDiv.appendChild(label1);
+        todoPriorityDiv.appendChild(selectDiv);
         todoForm.appendChild(todoPriorityDiv);
 
         const formButton = document.createElement("button");
         formButton.classList.add("todo-button");
         formButton.classList.add("edit-button");
         formButton.style.display = "none";
+
         const buttonImg = new Image;
         buttonImg.src = editIcon;
         buttonImg.classList.add("todo-button-img");
         formButton.appendChild(buttonImg);
+
         formButton.setAttribute("proID", pID);
         formButton.setAttribute("todoID", todoID);
+
         const delbutton = document.createElement("button");
         delbutton.classList.add("todo-button");
         delbutton.classList.add("del-button");
+        delbutton.style.display = "none";
+
         const buttonImg1 = new Image;
         buttonImg1.src = delIcon;
         buttonImg1.classList.add("todo-button-img");
         delbutton.appendChild(buttonImg1);
+
+        delbutton.setAttribute("proID", pID);
+        delbutton.setAttribute("todoID", todoID);
+        const buttons = [formButton, delbutton];
+        todoActionsHover(mbitem, buttons);
         todoForm.appendChild(formButton);
+        todoForm.appendChild(delbutton);
         mbitem.appendChild(todoForm);
         document.querySelector(".content").appendChild(mbitem);
 
     };
     const renderProject = (user, pID) => {
         const project = user.getProject(pID);
+        document.querySelector(".content").innerHTML = "";
         if (project) {
-            document.querySelector("header-title").textContent = project.getTitle();
+            document.querySelector(".header-title").textContent = project.getTitle();
             const todos = project.getTodoAll();
             for (let todo of todos) {
                 renderTodo(pID, todo);
@@ -232,5 +313,5 @@ export default function frontend() {
             renderProjectName(project.getTitle(), "project-tile", project.getId(), projectIcon);
         }
     };
-    return { fav_icon, loginForm, renderSidebar, updateName };
+    return { fav_icon, loginForm, renderSidebar, updateName, renderProject, editToDo, saveToDo, remToDo };
 }

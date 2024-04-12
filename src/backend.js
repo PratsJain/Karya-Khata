@@ -15,7 +15,7 @@ function toDo(Title, Desc, DueDate, Priority, Notes, Status = false) {
     const getDesc = () => desc;
     const setdueDate = (date) => { dueDate = date };
     const getdueDate = () => dueDate;
-    const setPrior = (prior) => { priority };
+    const setPrior = (prior) => { priority = prior};
     const getPrior = () => priority;
     const setNotes = (note) => { notes = note };
     const getNotes = () => notes;

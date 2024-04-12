@@ -44,6 +44,17 @@ body {
 }
 
 
+button,
+fieldset,
+input,
+legend,
+select,
+textarea, option {
+  appearance: none;
+  border: none;
+  outline: none;
+}
+
 
 .backdrop {
     pointer-events: none;
@@ -80,9 +91,16 @@ body {
 }
 
 
+label, input {
+    display: block;
+}
+
+input {
+    appearance: none;
+}
+
 .login-form-container label,
 .login-form-container input {
-    display: block;
     width: 100%;
     height: 25px;
 }
@@ -96,7 +114,6 @@ body {
 
 .login-form-container input {
     font-size: var(--font-size-3);
-    appearance: none;
     border: 1px solid silver;
     border-radius: var(--input-border-radius);
     padding-left: 10px;
@@ -309,19 +326,122 @@ button:hover {
 
 .content {
     display: grid;
-    grid-auto-columns: minmax(350px, 1fr);
-    grid-template-rows: 350px;
+    grid-auto-columns: 400px;
+    grid-template-rows: 400px;
     grid-auto-flow: column;
     gap: 25px;
     overflow-x: auto;
 }
 
 .content-item {
-    background-color: var(--peach-col-5);
+    background-color: var(--bkg-color);
     border-radius: var(--card-border-radius);
     box-shadow: var(--card-shadow);
+    padding: 20px;
+    overflow: auto;
+}
+
+.todo-form {
     display: flex;
     flex-direction: column;
     gap: 20px;
+    position: relative;
 }
 
+.todo-form input, .todo-form label, option, textarea {
+    border: none;
+    background-color: var(--bkg-color);
+    width: 100%;
+    outline: none;
+    font: inherit;
+    color: var(--font-color);
+
+}
+
+/* textarea {
+    background-color: var(--peach-col-1);
+} */
+
+
+.todo-form label {
+    font-weight: 200;
+    font-size: var(--font-size-3);
+    height: auto;
+    /* margin-top: 10px; */
+    /* padding-left: 5px; */
+}
+
+.todo-form input {
+    font-size: var(--font-size-2);
+    height: auto
+    /* padding-left: 10px; */
+}
+
+.todo-title input {
+    font-size: var(--font-size-1);
+    font-weight: bold;
+}
+
+
+/* .todo-form input:hover {
+    background-color: aliceblue;
+} */
+
+.todo-form input:focus, textarea:focus {
+    background-color: var(--peach-col-1);
+    
+}
+
+select, option {
+    font: inherit;
+    color: var(--font-color);
+    width: 100px;
+}
+
+.select-container {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
+
+.prior-color {
+    width: 35px;
+    height: 15px;
+    border-radius: var(--card-border-radius);
+}
+
+.todo-button {
+    position: absolute;
+    appearance: none;
+    font: inherit;
+    width: 30px;
+    height: 30px;
+    /* margin-top: 20px; */
+    border-radius: var(--button-border-radius);
+    background-color: white;
+    outline: none;
+    box-shadow: none;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.del-button {
+    top: 0px;
+    right: 5px;
+}
+
+.edit-button, .save-button {
+    top: 0px;
+    right: 40px;
+}
+
+.todo-button:hover {
+    background-color: var(--peach-col-1);
+}
+
+.todo-button-img {
+    height: 20px;
+    width: 20px;
+}
