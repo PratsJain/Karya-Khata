@@ -158,21 +158,22 @@ export default function frontend() {
         mbitem.setAttribute("todoID", todoID);
         const todoForm = document.createElement("form");
         todoForm.classList.add("todo-form");
-        todoForm.appendChild(renderInputElement("input", "Title-" + todoID, "ToDo-Title", todo.getTitle(), "todo-title", "Title", "text"));
-        todoForm.appendChild(renderInputElement("input", "Desc-" + todoID, "ToDo-Desc", todo.getDesc(), "todo-desc", "Description", "text"));
-        todoForm.appendChild(renderInputElement("input", "Date-" + todoID, "ToDo-Date", todo.getdueDate(), "todo-date", "Due Date", "date", true, true));
-        todoForm.appendChild(renderInputElement("textarea", "Notes-" + todoID, "ToDo-Notes", todo.getNotes(), "todo-notes", "Notes", null, true, true));
+        todoForm.appendChild(renderInputElement("input", "Title-" + todoID, "ToDo-Title", todo.getTitle(), "todo-title", "TITLE", "text"));
+        todoForm.appendChild(renderInputElement("input", "Desc-" + todoID, "ToDo-Desc", todo.getDesc(), "todo-desc", "DESCRIPTION", "text"));
+        todoForm.appendChild(renderInputElement("input", "Date-" + todoID, "ToDo-Date", todo.getdueDate(), "todo-date", "DUE DATE", "date", true, true));
+        todoForm.appendChild(renderInputElement("textarea", "Notes-" + todoID, "ToDo-Notes", todo.getNotes(), "todo-notes", "NOTES", null, true, true));
 
-        
+
         const fieldset = document.createElement("fieldset");
         const legend = document.createElement("legend");
-        legend.textContent = "Completion Status";
+        legend.textContent = "COMPLETION STATUS";
         const div = document.createElement("div");
         div.classList.add("todo-status");
         const input = document.createElement("input");
         input.setAttribute("type", "checkbox");
         input.setAttribute("id", "Status-" + todoID);
         input.setAttribute("name", "ToDo-Status");
+        input.classList.add("todo-status-box");
         input.setAttribute("proID", pID);
         input.setAttribute("todoID", todoID);
         input.checked = todo.getStatus();
@@ -190,7 +191,7 @@ export default function frontend() {
 
         const label1 = document.createElement("label");
         label1.setAttribute("for", "Priority-" + todoID);
-        label1.textContent = "Priority";
+        label1.textContent = "PRIORITY";
 
         // Create a select element
         const select = document.createElement("select");

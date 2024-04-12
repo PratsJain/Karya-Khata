@@ -6,6 +6,7 @@
     --font-size-1: 20px;
     --font-size-2: 18px;
     --font-size-3: 15px;
+    --font-size-4: 13px;
     --sidebar-bkc: #082f49;
     --container-level-padding: 20px;
     --backdrop-col: black;
@@ -355,6 +356,7 @@ button:hover {
     outline: none;
     font: inherit;
     color: var(--font-color);
+    border-radius: 5px;
 
 }
 
@@ -363,16 +365,13 @@ button:hover {
 } */
 
 
-.todo-form label {
-    font-weight: 200;
-    font-size: var(--font-size-3);
+.todo-form label, legend {
+    font-size: var(--font-size-4);
     height: auto;
-    /* margin-top: 10px; */
-    /* padding-left: 5px; */
 }
 
 .todo-form input {
-    font-size: var(--font-size-2);
+    /* font-size: var(--font-size-2); */
     height: auto
     /* padding-left: 10px; */
 }
@@ -387,9 +386,17 @@ button:hover {
     background-color: aliceblue;
 } */
 
-.todo-form input:focus, textarea:focus {
+textarea {
     background-color: var(--peach-col-1);
+}
+
+textarea:focus {
+    background-color: var(--peach-col-2);
     
+}
+
+.todo-date input {
+    width: auto;
 }
 
 .todo-status {
@@ -400,17 +407,18 @@ button:hover {
 
 input[type='checkbox'] {
     position: relative;
-    height: 20px;
+    height: 18px;
     width: 20px;
-    border-radius: 20px;
+    border-radius: 50px;
     border: 1px solid black;
     display: inline;
     background-color: var(--bkg-color);
     cursor: pointer;
 }
 
-fieldset label {
+.todo-status label {
     cursor: pointer;
+    font-size: var(--font-size-3);
 }
 
 input[type='checkbox']:checked {
@@ -427,8 +435,7 @@ input[type="checkbox"]::after {
     height: 10px;
     position: absolute;
     color: white;
-    /* top: 50%; */
-    left: 15%;
+    left: 18%;
     transform: translate(0%, 0%) scale(0);
     border-radius: 2px;
     transition: transform 0.2s ease;
@@ -438,9 +445,6 @@ input[type="checkbox"]::after {
 input[type="checkbox"]:checked::after {
     transform: translate(0%, 0%) scale(0.8);
 }
-
-
-
 
 
 select, option {
@@ -467,7 +471,7 @@ select, option {
     font: inherit;
     width: 30px;
     height: 30px;
-    /* margin-top: 20px; */
+    top: -6%;
     border-radius: var(--button-border-radius);
     background-color: white;
     outline: none;
@@ -479,17 +483,15 @@ select, option {
 }
 
 .del-button {
-    top: 0px;
-    right: 5px;
+    right: 0px;
 }
 
 .edit-button, .save-button {
-    top: 0px;
-    right: 40px;
+    right: 30px;
 }
 
 .todo-button:hover {
-    background-color: var(--peach-col-1);
+    border: 1px solid var(--peach-col-7);
 }
 
 .todo-button-img {

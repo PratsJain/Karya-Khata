@@ -20,6 +20,7 @@ const app = (function ScreenController() {
         const status = document.getElementById("Status-" + todoID).checked;
         user.updateTodo(proID, todoID, title, desc, notes, dueDate, prior, status);
     };
+
     const todoActionHandler = (button) => {
         return function (event) {
             event.preventDefault();
@@ -40,6 +41,14 @@ const app = (function ScreenController() {
             }
         };
     };
+
+    const toggleTodoStatus = (inp) => {
+        const proID = inp.getAttribute("proID");
+        const todoID = inp.getAttribute("todoID");
+        const status = inp.checked;
+        user.toggleTodo(proID, todoID, status);
+    };
+
     document.querySelector(".login-form-container").addEventListener("submit", (event) => {
         event.preventDefault();
         const fname = document.querySelector("#fname").value;
@@ -52,6 +61,7 @@ const app = (function ScreenController() {
     });
 
     front.renderSidebar(user);
+
     const allProjects = document.querySelectorAll(".project-tile");
     allProjects.forEach((project) => {
         project.addEventListener("click", () => {
@@ -59,6 +69,12 @@ const app = (function ScreenController() {
             const todoButtons = document.querySelectorAll(".todo-button");
             todoButtons.forEach((button) => {
                 button.addEventListener('click', todoActionHandler(button));
+            });
+            const todoStatusInputs = document.querySelectorAll(".todo-status-box");
+            todoStatusInputs.forEach((inp) => {
+                inp.addEventListener("change", (event) => {
+                    toggleTodoStatus(inp);
+                });
             });
         });
     });
