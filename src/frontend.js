@@ -119,6 +119,28 @@ export default function frontend() {
         const todoDiv = document.querySelector(`.content-item[todoID=${todoID}]`);
         todoDiv.remove();
     };
+
+    const createActionButton = (clsList, defDis, buttonImage, pID, todoID = null) => {
+
+        const formButton = document.createElement("button");
+        clsList.forEach((cls) => {
+            formButton.classList.add(cls);
+        })
+
+        formButton.style.display = defDis;
+
+        const buttonImg = new Image;
+        buttonImg.src = buttonImage;
+        buttonImg.classList.add("todo-button-img");
+        formButton.appendChild(buttonImg);
+
+        formButton.setAttribute("proID", pID);
+        if (todoID) {
+            formButton.setAttribute("todoID", todoID);
+        }
+        return formButton;
+    };
+
     const renderInputElement = (elType, id, name, value, cls, label, type = null, isDisable = true, labelDisplay = false) => {
         const divwrap = document.createElement("div");
         divwrap.classList.add(cls);
@@ -235,33 +257,11 @@ export default function frontend() {
         todoPriorityDiv.appendChild(selectDiv);
         todoForm.appendChild(todoPriorityDiv);
 
-        const formButton = document.createElement("button");
-        formButton.classList.add("todo-button");
-        formButton.classList.add("edit-button");
-        formButton.style.display = "none";
-
-        const buttonImg = new Image;
-        buttonImg.src = editIcon;
-        buttonImg.classList.add("todo-button-img");
-        formButton.appendChild(buttonImg);
-
-        formButton.setAttribute("proID", pID);
-        formButton.setAttribute("todoID", todoID);
-
-        const delbutton = document.createElement("button");
-        delbutton.classList.add("todo-button");
-        delbutton.classList.add("del-button");
-        delbutton.style.display = "none";
-
-        const buttonImg1 = new Image;
-        buttonImg1.src = delIcon;
-        buttonImg1.classList.add("todo-button-img");
-        delbutton.appendChild(buttonImg1);
-
-        delbutton.setAttribute("proID", pID);
-        delbutton.setAttribute("todoID", todoID);
+        const formButton = createActionButton(["todo-button", "edit-button"], "none", editIcon, pID, todoID);
+        const delbutton = createActionButton(["todo-button", "del-button"], "none", delIcon, pID, todoID);
         const buttons = [formButton, delbutton];
         todoActionsHover(mbitem, buttons);
+
         todoForm.appendChild(formButton);
         todoForm.appendChild(delbutton);
         mbitem.appendChild(todoForm);
@@ -272,8 +272,39 @@ export default function frontend() {
 
     const renderProject = (user, pID) => {
         const project = user.getProject(pID);
-        document.querySelector(".content").innerHTML = "";
         if (project) {
+            document.querySelector(".content").innerHTML = "";
+            const headerDiv = document.querySelector(".header");
+            headerDiv.innerHTML = "";
+            const proTitleContainer = document.createElement("div");
+            proTitleContainer.classList.add("header-title-container");
+            proTitleContainer.classList.add("topdown-animation");
+            const proTitle = document.createElement("input");
+            proTitle.setAttribute("type", "text");
+            proTitle.setAttribute("proID", pID);
+            proTitle.setAttribute("id", "Title-" + pID);
+            proTitle.setAttribute("name", "Project Title");
+            proTitle.classList.add("header-title");
+            proTitle.disabled = true;
+            proTitle.value = project.getTitle();
+            proTitleContainer.appendChild(proTitle);
+
+            const formButton = createActionButton(["todo-button", "edit-project-button"], "none", editIcon, pID);
+            const delbutton = createActionButton(["todo-button", "del-project-button"], "none", delIcon, pID);
+            const buttons = [formButton, delbutton];
+            todoActionsHover(proTitleContainer, buttons);
+            proTitleContainer.appendChild(formButton);
+            proTitleContainer.appendChild(delbutton);
+            headerDiv.appendChild(proTitleContainer);
+
+            const addTodoButton = document.createElement("button");
+            addTodoButton.classList.add("add-todo-button");
+            addTodoButton.setAttribute("id", "add-todo-" + pID);
+            addTodoButton.textContent = "New Task +";
+            addTodoButton.classList.add("topdown-animation");
+            headerDiv.appendChild(addTodoButton);
+
+
             document.querySelector(".header-title").textContent = project.getTitle();
             const todos = project.getTodoAll();
             for (let todo of todos) {
@@ -304,6 +335,8 @@ export default function frontend() {
         swidget.appendChild(widContent);
         pro_items.appendChild(swidget);
     };
+
+
     const renderSidebar = (user) => {
         const uname = user.getName();
         const ncard = document.createElement("div");
