@@ -516,6 +516,7 @@ button {
     display: flex;
     align-items: center;
     justify-content: center;
+    opacity: 0.75;
 }
 
 .del-button {
@@ -527,7 +528,7 @@ button {
 }
 
 .todo-button:hover {
-    border: 1px solid var(--peach-col-7);
+    opacity: 1;
 }
 
 .todo-button-img {

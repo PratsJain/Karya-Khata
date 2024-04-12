@@ -39,6 +39,21 @@ const app = (function ScreenController() {
                 user.remTodo(pID, todoID);
                 front.remToDo(todoID);
             }
+            else if (button.classList.contains("edit-project-button")) {
+                front.editProject(button.getAttribute("proID"), button);
+            }
+            else if (button.classList.contains("save-project-button")) {
+                const pID = button.getAttribute("proID");
+                const title = document.getElementById("Title-" + pID).value;
+                user.updateProject(title, pID);
+                front.saveProject(pID, button);
+            }
+            else if (button.classList.contains("del-project-button")) {
+                const pID = button.getAttribute("proID");
+                user.removeProject(pID);
+                front.renderSidebar(user);
+                //Add home-click logic
+            }
         };
     };
 

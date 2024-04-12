@@ -120,6 +120,21 @@ export default function frontend() {
         todoDiv.remove();
     };
 
+    const editProject = (pID, button) => {
+        document.getElementById("Title-" + pID).disabled = false;
+        button.querySelector("img").src = saveIcon;
+        button.classList.remove("edit-project-button");
+        button.classList.add("save-project-button");
+    };
+
+    const saveProject = (pID, button) => {
+        document.getElementById("Title-" + pID).disabled = true;
+        button.querySelector("img").src = editIcon;
+        button.classList.remove("save-project-button");
+        button.classList.add("edit-project-button");
+    }
+
+  
     const createActionButton = (clsList, defDis, buttonImage, pID, todoID = null) => {
 
         const formButton = document.createElement("button");
@@ -305,7 +320,6 @@ export default function frontend() {
             headerDiv.appendChild(addTodoButton);
 
 
-            document.querySelector(".header-title").textContent = project.getTitle();
             const todos = project.getTodoAll();
             for (let todo of todos) {
                 renderTodo(pID, todo);
@@ -367,5 +381,5 @@ export default function frontend() {
             renderProjectName(project.getTitle(), "project-tile", project.getId(), projectIcon);
         }
     };
-    return { fav_icon, loginForm, renderSidebar, updateName, renderProject, editToDo, saveToDo, remToDo };
+    return { fav_icon, loginForm, renderSidebar, updateName, renderProject, editToDo, saveToDo, remToDo, editProject, saveProject};
 }
