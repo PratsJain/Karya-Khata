@@ -6,7 +6,7 @@ import man from './assets/man.png';
 import editIcon from './assets/edit.png';
 import delIcon from './assets/delete.png';
 import saveIcon from './assets/save.png';
-import { el } from 'date-fns/locale';
+import { format } from 'date-fns';
 
 
 export default function frontend() {
@@ -90,6 +90,8 @@ export default function frontend() {
         document.getElementById("Desc-" + todoID).disabled = false;
         document.getElementById("Notes-" + todoID).disabled = false;
         document.getElementById("Date-" + todoID).disabled = false;
+        document.getElementById("Date-" + todoID).style.display = "block";
+        document.getElementById("Date-" + todoID).nextElementSibling.style.display = "none";
         document.getElementById("Priority-" + todoID).disabled = false;
         document.getElementById("Title-" + todoID).previousSibling.style.display = "block";
         document.getElementById("Desc-" + todoID).previousSibling.style.display = "block";
@@ -103,6 +105,8 @@ export default function frontend() {
         document.getElementById("Desc-" + todoID).disabled = true;
         document.getElementById("Notes-" + todoID).disabled = true;
         document.getElementById("Date-" + todoID).disabled = true;
+        document.getElementById("Date-" + todoID).style.display = "none";
+        document.getElementById("Date-" + todoID).nextElementSibling.style.display = "block";
         document.getElementById("Priority-" + todoID).disabled = true;
         document.getElementById("Title-" + todoID).previousSibling.style.display = "none";
         document.getElementById("Desc-" + todoID).previousSibling.style.display = "none";
@@ -134,6 +138,16 @@ export default function frontend() {
         inp.value = value;
         inp.disabled = isDisable;
         divwrap.appendChild(inp);
+        if (type === 'date') {
+            const dateDiv = document.createElement("div");
+            dateDiv.classList.add("date-viewer");
+            dateDiv.textContent = format(inp.value, "MMMM dd, yyyy");
+            inp.style.display = "none";
+            inp.addEventListener("change", (event) => {
+                dateDiv.textContent = format(inp.value, "MMMM dd, yyyy");
+            });
+            divwrap.appendChild(dateDiv);
+        }
         return divwrap;
     };
     const renderTodo = (pID, todo, isDisable = true) => {
@@ -208,7 +222,7 @@ export default function frontend() {
         const priorCol = document.createElement("div");
         priorCol.classList.add("prior-color");
         priorCol.style.backgroundColor = getPriCol(parseInt(select.value));
-        
+
         select.addEventListener("change", (event) => {
             priorCol.style.backgroundColor = getPriCol(parseInt(select.value));
         });
