@@ -116,10 +116,18 @@ export default function frontend() {
     };
 
     const remToDo = (todoID) => {
-        const todoDiv = document.querySelector(`.content-item[todoID=${todoID}]`);
+        const todoDiv = document.querySelector(`.content-item[todoID='${todoID}']`);
         todoDiv.remove();
     };
 
+    const addNewTodo = (pID, todo) => {
+        removeNewTodo();
+        renderTodo(pID, todo);
+    };
+
+    const removeNewTodo = () => {
+        document.querySelector(".content-item[todoID='new-todo']").remove();
+    };
     const editProject = (pID, button) => {
         document.getElementById("Title-" + pID).disabled = false;
         button.querySelector("img").src = saveIcon;
@@ -134,7 +142,7 @@ export default function frontend() {
         button.classList.add("edit-project-button");
     }
 
-  
+
     const createActionButton = (clsList, defDis, buttonImage, pID, todoID = null) => {
 
         const formButton = document.createElement("button");
@@ -187,6 +195,109 @@ export default function frontend() {
         }
         return divwrap;
     };
+
+
+    const renderNewTodo = (pID) => {
+        const todoID = "new-todo";
+        const mbitem = document.createElement("div");
+        mbitem.classList.add("content-item");
+        mbitem.setAttribute("proID", pID);
+        mbitem.setAttribute("todoID", todoID);
+        const todoForm = document.createElement("form");
+        todoForm.classList.add("todo-form");
+        const title = "Task Name";
+        const desc = "Task Description";
+        let dt = new Date();
+        dt = dt.toISOString().slice(0, 10);
+        const notes = "Add Notes";
+        todoForm.appendChild(renderInputElement("input", "Title-" + todoID, "ToDo-Title", title, "todo-title", "TITLE", "text", false, true));
+        todoForm.appendChild(renderInputElement("input", "Desc-" + todoID, "ToDo-Desc", desc, "todo-desc", "DESCRIPTION", "text", false, true));
+        todoForm.appendChild(renderInputElement("input", "Date-" + todoID, "ToDo-Date", dt, "todo-date", "DUE DATE", "date", false, true));
+        todoForm.appendChild(renderInputElement("textarea", "Notes-" + todoID, "ToDo-Notes", notes, "todo-notes", "NOTES", null, false, true));
+
+        const fieldset = document.createElement("fieldset");
+        const legend = document.createElement("legend");
+        legend.textContent = "COMPLETION STATUS";
+        const div = document.createElement("div");
+        div.classList.add("todo-status");
+        const input = document.createElement("input");
+        input.setAttribute("type", "checkbox");
+        input.setAttribute("id", "Status-" + todoID);
+        input.setAttribute("name", "ToDo-Status");
+        input.classList.add("todo-status-box");
+        input.setAttribute("proID", pID);
+        input.setAttribute("todoID", todoID);
+        input.checked = false;
+        const label = document.createElement("label");
+        label.setAttribute("for", "Status-" + todoID);
+        label.textContent = "Completed";
+        div.appendChild(input);
+        div.appendChild(label);
+        fieldset.appendChild(legend);
+        fieldset.appendChild(div);
+        todoForm.appendChild(fieldset);
+
+        const todoPriorityDiv = document.createElement("div");
+        todoPriorityDiv.classList.add("todo-priority");
+
+        const label1 = document.createElement("label");
+        label1.setAttribute("for", "Priority-" + todoID);
+        label1.textContent = "PRIORITY";
+
+        // Create a select element
+        const select = document.createElement("select");
+        select.setAttribute("name", "Priority");
+        select.setAttribute("id", "Priority-" + todoID);
+
+        // Create an array of priority options
+        const priorityOptions = [
+            "Urgent",
+            "Very Important",
+            "Important",
+            "Reminder",
+            "Casual"
+        ];
+
+        // Create and append option elements to the select element
+        priorityOptions.forEach(function (optionText, index) {
+            const option = document.createElement("option");
+            option.setAttribute("value", index); // Set the value as the index (starting from 0)
+            option.textContent = optionText;
+            select.appendChild(option);
+        });
+
+        // Append the label and select elements to the todoPriorityDiv
+        select.selectedIndex = 0;
+        select.disabled = false;
+        const selectDiv = document.createElement("div");
+        selectDiv.classList.add("select-container");
+        selectDiv.appendChild(select);
+
+        const priorCol = document.createElement("div");
+        priorCol.classList.add("prior-color");
+        priorCol.style.backgroundColor = getPriCol(parseInt(select.value));
+
+        select.addEventListener("change", (event) => {
+            priorCol.style.backgroundColor = getPriCol(parseInt(select.value));
+        });
+
+        selectDiv.appendChild(priorCol);
+        todoPriorityDiv.appendChild(label1);
+        todoPriorityDiv.appendChild(selectDiv);
+        todoForm.appendChild(todoPriorityDiv);
+
+        const formButton = createActionButton(["todo-button", "edit-new-button"], "none", editIcon, pID, todoID);
+        const delbutton = createActionButton(["todo-button", "del-new-button"], "none", delIcon, pID, todoID);
+        const buttons = [formButton, delbutton];
+        todoActionsHover(mbitem, buttons);
+
+        todoForm.appendChild(formButton);
+        todoForm.appendChild(delbutton);
+        mbitem.appendChild(todoForm);
+        document.querySelector(".content").appendChild(mbitem);
+
+    };
+
     const renderTodo = (pID, todo, isDisable = true) => {
         const todoID = todo.getId();
         const mbitem = document.createElement("div");
@@ -381,5 +492,5 @@ export default function frontend() {
             renderProjectName(project.getTitle(), "project-tile", project.getId(), projectIcon);
         }
     };
-    return { fav_icon, loginForm, renderSidebar, updateName, renderProject, editToDo, saveToDo, remToDo, editProject, saveProject};
+    return { fav_icon, loginForm, renderSidebar, updateName, renderProject, editToDo, saveToDo, remToDo, editProject, saveProject, addNewTodo, renderNewTodo, removeNewTodo };
 }

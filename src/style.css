@@ -519,11 +519,11 @@ button {
     opacity: 0.75;
 }
 
-.del-button {
+.del-button, .del-new-button {
     right: 0px;
 }
 
-.edit-button, .save-button {
+.edit-button, .edit-new-button, .save-button {
     right: 35px;
 }
 

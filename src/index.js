@@ -64,6 +64,43 @@ const app = (function ScreenController() {
         user.toggleTodo(proID, todoID, status);
     };
 
+    const addTodo = (proID, todoID) => {
+        const title = document.getElementById("Title-" + todoID).value;
+        const desc = document.getElementById("Desc-" + todoID).value;
+        const notes = document.getElementById("Notes-" + todoID).value;
+        const dueDate = document.getElementById("Date-" + todoID).value;
+        const prior = parseInt(document.getElementById("Priority-" + todoID).value) + 1;
+        const status = document.getElementById("Status-" + todoID).checked;
+        const tID = user.addTodo(proID, title, desc, notes, dueDate, prior, status);
+        front.addNewTodo(proID, user.getProject(proID).getTodo(tID));
+        return tID;
+    };
+
+
+    const addNewTodo = (pID) => {
+
+        if(!document.querySelector(".content-item[todoID='new-todo']")) {
+            front.renderNewTodo(pID);
+            document.querySelector(".edit-new-button[todoID='new-todo']").addEventListener('click', (event) => {
+                event.preventDefault();
+                const todoID = addTodo(pID, "new-todo");
+                const newTodoButtons = document.querySelectorAll(`.todo-button[todoID='${todoID}']`);
+                newTodoButtons.forEach((button) => {
+                    button.addEventListener('click', todoActionHandler(button));
+                });
+                const inp = document.getElementById(`Status-${todoID}`);
+                inp.addEventListener("change", (event) => {
+                    toggleTodoStatus(inp);
+                });
+            });
+
+            document.querySelector(".del-new-button[todoID=new-todo]").addEventListener('click', (event) => {
+                event.preventDefault();
+                front.removeNewTodo();
+            });
+        }
+    };
+
     document.querySelector(".login-form-container").addEventListener("submit", (event) => {
         event.preventDefault();
         const fname = document.querySelector("#fname").value;
@@ -81,15 +118,21 @@ const app = (function ScreenController() {
     allProjects.forEach((project) => {
         project.addEventListener("click", () => {
             front.renderProject(user, project.getAttribute("proID"));
+
             const todoButtons = document.querySelectorAll(".todo-button");
             todoButtons.forEach((button) => {
                 button.addEventListener('click', todoActionHandler(button));
             });
+
             const todoStatusInputs = document.querySelectorAll(".todo-status-box");
             todoStatusInputs.forEach((inp) => {
                 inp.addEventListener("change", (event) => {
                     toggleTodoStatus(inp);
                 });
+            });
+
+            document.getElementById(`add-todo-${project.getAttribute("proID")}`).addEventListener("click", (event) => {
+                addNewTodo(project.getAttribute("proID"));
             });
         });
     });
