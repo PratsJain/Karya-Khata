@@ -4,9 +4,11 @@ import fav from './assets/fav.png';
 import frontend from './frontend.js';
 
 const app = (function ScreenController() {
+
     const front = frontend();
     front.fav_icon(fav);
     const user = User();
+
     if (!user.getisData()) {
         front.loginForm();
     }
@@ -44,15 +46,16 @@ const app = (function ScreenController() {
             }
             else if (button.classList.contains("save-project-button")) {
                 const pID = button.getAttribute("proID");
-                const title = document.getElementById("Title-" + pID).value;
+                let title = document.getElementById("Title-" + pID).value;
+                title = (title.trim() === "") ? "Edited Project" : title.trim();
                 user.updateProject(title, pID);
-                front.saveProject(pID, button);
+                front.saveProject(pID, button, title);
             }
             else if (button.classList.contains("del-project-button")) {
                 const pID = button.getAttribute("proID");
                 user.removeProject(pID);
-                front.renderSidebar(user);
-                //Add home-click logic
+                front.delProjectName(pID);
+                front.renderHome();
             }
         };
     };
@@ -79,7 +82,7 @@ const app = (function ScreenController() {
 
     const addNewTodo = (pID) => {
 
-        if(!document.querySelector(".content-item[todoID='new-todo']")) {
+        if (!document.querySelector(".content-item[todoID='new-todo']")) {
             front.renderNewTodo(pID);
             document.querySelector(".edit-new-button[todoID='new-todo']").addEventListener('click', (event) => {
                 event.preventDefault();
@@ -114,26 +117,59 @@ const app = (function ScreenController() {
 
     front.renderSidebar(user);
 
+
+    const renderProject = (project) => {
+        front.renderProject(user, project.getAttribute("proID"));
+
+        const todoButtons = document.querySelectorAll(".todo-button");
+        todoButtons.forEach((button) => {
+            button.addEventListener('click', todoActionHandler(button));
+        });
+
+        const todoStatusInputs = document.querySelectorAll(".todo-status-box");
+        todoStatusInputs.forEach((inp) => {
+            inp.addEventListener("change", (event) => {
+                toggleTodoStatus(inp);
+            });
+        });
+
+        document.getElementById(`add-todo-${project.getAttribute("proID")}`).addEventListener("click", (event) => {
+            addNewTodo(project.getAttribute("proID"));
+        });
+    };
+
+
+    document.querySelector(".create-pro").addEventListener("click", (event) => {
+
+        if (!document.getElementById("new-project")) {
+            front.addNewProject();
+            document.querySelector(".edit-project-button[proID='new-project']").addEventListener('click', (event) => {
+
+                let title = document.getElementById("Title-new-project").value;
+                title = (title.trim() === "") ? "New Project" : title.trim();
+                const proID = user.addProject(title);
+                const project = user.getProject(proID);
+                front.renderProjectName(project.getTitle(), "project-tile", project.getId());
+                const pTile = document.querySelector(`.project-tile[proID="${proID}"]`);
+                pTile.addEventListener("click", () => {
+                    renderProject(pTile);
+                });
+                front.renderProject(user, proID);
+                renderProject(pTile);
+            });
+
+            document.querySelector(".del-project-button[proID=new-project]").addEventListener('click', (event) => {
+                front.renderHome();
+            });
+        }
+    });
+
+    
+
     const allProjects = document.querySelectorAll(".project-tile");
     allProjects.forEach((project) => {
         project.addEventListener("click", () => {
-            front.renderProject(user, project.getAttribute("proID"));
-
-            const todoButtons = document.querySelectorAll(".todo-button");
-            todoButtons.forEach((button) => {
-                button.addEventListener('click', todoActionHandler(button));
-            });
-
-            const todoStatusInputs = document.querySelectorAll(".todo-status-box");
-            todoStatusInputs.forEach((inp) => {
-                inp.addEventListener("change", (event) => {
-                    toggleTodoStatus(inp);
-                });
-            });
-
-            document.getElementById(`add-todo-${project.getAttribute("proID")}`).addEventListener("click", (event) => {
-                addNewTodo(project.getAttribute("proID"));
-            });
+            renderProject(project);
         });
     });
 })();

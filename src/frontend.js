@@ -135,12 +135,18 @@ export default function frontend() {
         button.classList.add("save-project-button");
     };
 
-    const saveProject = (pID, button) => {
+    const saveProject = (pID, button, title) => {
         document.getElementById("Title-" + pID).disabled = true;
+        document.querySelector(`.project-tile[proID="${pID}"] p`).textContent = title;
         button.querySelector("img").src = editIcon;
         button.classList.remove("save-project-button");
         button.classList.add("edit-project-button");
     }
+
+    const addNewProject = () => {
+        document.querySelector(".content").innerHTML = "";
+        renderProjectTitle("new-project");
+    };
 
 
     const createActionButton = (clsList, defDis, buttonImage, pID, todoID = null) => {
@@ -187,7 +193,12 @@ export default function frontend() {
             const dateDiv = document.createElement("div");
             dateDiv.classList.add("date-viewer");
             dateDiv.textContent = format(inp.value, "MMMM dd, yyyy");
-            inp.style.display = "none";
+            if (isDisable) {
+                inp.style.display = "none";
+            }
+            else {
+                dateDiv.style.display = "none";
+            }
             inp.addEventListener("change", (event) => {
                 dateDiv.textContent = format(inp.value, "MMMM dd, yyyy");
             });
@@ -286,7 +297,7 @@ export default function frontend() {
         todoPriorityDiv.appendChild(selectDiv);
         todoForm.appendChild(todoPriorityDiv);
 
-        const formButton = createActionButton(["todo-button", "edit-new-button"], "none", editIcon, pID, todoID);
+        const formButton = createActionButton(["todo-button", "edit-new-button"], "none", saveIcon, pID, todoID);
         const delbutton = createActionButton(["todo-button", "del-new-button"], "none", delIcon, pID, todoID);
         const buttons = [formButton, delbutton];
         todoActionsHover(mbitem, buttons);
@@ -396,38 +407,44 @@ export default function frontend() {
     };
 
 
+
+    const renderProjectTitle = (pID, value = "Project Title", isDisable = false, icon = saveIcon) => {
+        const headerDiv = document.querySelector(".header");
+        headerDiv.innerHTML = "";
+        const proTitleContainer = document.createElement("div");
+        proTitleContainer.classList.add("header-title-container");
+        proTitleContainer.classList.add("topdown-animation");
+        const proTitle = document.createElement("input");
+        proTitle.setAttribute("type", "text");
+        proTitle.setAttribute("proID", pID);
+        proTitle.setAttribute("id", "Title-" + pID);
+        proTitle.setAttribute("name", "Project Title");
+        proTitle.classList.add("header-title");
+        proTitle.disabled = isDisable;
+        proTitle.value = value
+        proTitleContainer.appendChild(proTitle);
+
+        const formButton = createActionButton(["todo-button", "edit-project-button"], "none", icon, pID);
+        const delbutton = createActionButton(["todo-button", "del-project-button"], "none", delIcon, pID);
+        const buttons = [formButton, delbutton];
+        todoActionsHover(proTitleContainer, buttons);
+        proTitleContainer.appendChild(formButton);
+        proTitleContainer.appendChild(delbutton);
+        headerDiv.appendChild(proTitleContainer);
+    };
+
     const renderProject = (user, pID) => {
         const project = user.getProject(pID);
         if (project) {
             document.querySelector(".content").innerHTML = "";
-            const headerDiv = document.querySelector(".header");
-            headerDiv.innerHTML = "";
-            const proTitleContainer = document.createElement("div");
-            proTitleContainer.classList.add("header-title-container");
-            proTitleContainer.classList.add("topdown-animation");
-            const proTitle = document.createElement("input");
-            proTitle.setAttribute("type", "text");
-            proTitle.setAttribute("proID", pID);
-            proTitle.setAttribute("id", "Title-" + pID);
-            proTitle.setAttribute("name", "Project Title");
-            proTitle.classList.add("header-title");
-            proTitle.disabled = true;
-            proTitle.value = project.getTitle();
-            proTitleContainer.appendChild(proTitle);
-
-            const formButton = createActionButton(["todo-button", "edit-project-button"], "none", editIcon, pID);
-            const delbutton = createActionButton(["todo-button", "del-project-button"], "none", delIcon, pID);
-            const buttons = [formButton, delbutton];
-            todoActionsHover(proTitleContainer, buttons);
-            proTitleContainer.appendChild(formButton);
-            proTitleContainer.appendChild(delbutton);
-            headerDiv.appendChild(proTitleContainer);
+            renderProjectTitle(pID, project.getTitle(), true, editIcon);
 
             const addTodoButton = document.createElement("button");
             addTodoButton.classList.add("add-todo-button");
             addTodoButton.setAttribute("id", "add-todo-" + pID);
             addTodoButton.textContent = "New Task +";
             addTodoButton.classList.add("topdown-animation");
+            const headerDiv = document.querySelector(".header");
             headerDiv.appendChild(addTodoButton);
 
 
@@ -439,7 +456,11 @@ export default function frontend() {
     };
 
 
-    const renderProjectName = (pname, cls, pid = null, icon = null) => {
+    const delProjectName = (pID) => {
+        document.querySelector(`.project-tile[proID="${pID}"]`).remove();
+    };
+
+    const renderProjectName = (pname, cls, pid = null, icon = projectIcon) => {
         const sidebar = document.querySelector(".sidebar");
         const pro_items = document.querySelector('.user-projects');
         const swidget = document.createElement("div");
@@ -492,5 +513,12 @@ export default function frontend() {
             renderProjectName(project.getTitle(), "project-tile", project.getId(), projectIcon);
         }
     };
-    return { fav_icon, loginForm, renderSidebar, updateName, renderProject, editToDo, saveToDo, remToDo, editProject, saveProject, addNewTodo, renderNewTodo, removeNewTodo };
+
+    const renderHome = () => {
+        const headerDiv = document.querySelector(".header");
+        headerDiv.innerHTML = "";
+        document.querySelector(".content").innerHTML = "";
+    };
+
+    return { fav_icon, loginForm, renderSidebar, updateName, renderProject, editToDo, saveToDo, remToDo, editProject, saveProject, addNewTodo, renderNewTodo, removeNewTodo, addNewProject, renderProjectName, renderHome, delProjectName };
 }
