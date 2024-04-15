@@ -6,7 +6,9 @@ import man from './assets/man.png';
 import editIcon from './assets/edit.png';
 import delIcon from './assets/delete.png';
 import saveIcon from './assets/save.png';
+import addIcon from './assets/add.png';
 import { format } from 'date-fns';
+// import { container } from 'webpack';
 
 
 export default function frontend() {
@@ -208,10 +210,13 @@ export default function frontend() {
     };
 
 
-    const renderNewTodo = (pID) => {
+    const renderNewTodo = (pID, parent, customCls = null) => {
         const todoID = "new-todo";
         const mbitem = document.createElement("div");
         mbitem.classList.add("content-item");
+        if (customCls) {
+            mbitem.classList.add(customCls);
+        }
         mbitem.setAttribute("proID", pID);
         mbitem.setAttribute("todoID", todoID);
         const todoForm = document.createElement("form");
@@ -305,7 +310,7 @@ export default function frontend() {
         todoForm.appendChild(formButton);
         todoForm.appendChild(delbutton);
         mbitem.appendChild(todoForm);
-        document.querySelector(".content").appendChild(mbitem);
+        parent.appendChild(mbitem);
 
     };
 
@@ -460,11 +465,11 @@ export default function frontend() {
         document.querySelector(`.project-tile[proID="${pID}"]`).remove();
     };
 
-    const renderProjectName = (pname, cls, pid = null, icon = projectIcon) => {
+    const renderProjectName = (pname, cls, pid = null, icon = projectIcon, widgetCls = "sidebar-widget") => {
         const sidebar = document.querySelector(".sidebar");
         const pro_items = document.querySelector('.user-projects');
         const swidget = document.createElement("div");
-        swidget.classList.add("sidebar-widget");
+        swidget.classList.add(widgetCls);
         swidget.classList.add(cls);
         swidget.classList.add("sidebar-anim");
         if (pid) {
@@ -508,17 +513,212 @@ export default function frontend() {
         pro_items.classList.add("user-projects");
         sidebar.appendChild(pro_items);
         renderProjectName("Home", "home-tile", null, homeIcon);
-        renderProjectName("All Projects", "all-projects-tile", null, projectIcon);
+        renderProjectName("All Projects", "all-projects-tile", null, projectIcon, "sidebar-widget-fixed");
         for (let project of user.getProjectAll()) {
             renderProjectName(project.getTitle(), "project-tile", project.getId(), projectIcon);
         }
     };
 
-    const renderHome = () => {
+    const renderTodoHome = (pID, todo) => {
+        const todoID = todo.getId();
+        const todoContainer = document.createElement("div");
+        todoContainer.classList.add("todo-home-container");
+        todoContainer.classList.add(`prior-${todo.getPrior()}`);
+        todoContainer.setAttribute("id", "todocard-" + todo.getId());
+        todoContainer.setAttribute("proID", pID);
+        todoContainer.setAttribute("todoID", todo.getId());
+        const todoInfo = document.createElement("div");
+        todoInfo.classList.add("home-todo-info");
+        const todoTitle = document.createElement("div");
+        todoTitle.classList.add("home-todo-title");
+        todoTitle.setAttribute("proID", pID);
+        todoTitle.setAttribute("todoID", todoID);
+        todoTitle.textContent = todo.getTitle();
+        todoInfo.appendChild(todoTitle);
+
+        const todoDate = document.createElement("div");
+        todoDate.classList.add("home-todo-date");
+        todoDate.setAttribute("proID", pID);
+        todoDate.setAttribute("todoID", todoID);
+        todoDate.textContent = format(todo.getdueDate(), "MMMM dd, yyyy");
+        todoInfo.appendChild(todoDate);
+        todoContainer.appendChild(todoInfo);
+
+        const input = document.createElement("input");
+        input.setAttribute("type", "checkbox");
+        input.setAttribute("id", "Status-" + todoID);
+        input.setAttribute("name", "ToDo-Status");
+        input.classList.add("todo-status-box");
+        input.setAttribute("proID", pID);
+        input.setAttribute("todoID", todoID);
+        input.checked = todo.getStatus();
+        todoContainer.appendChild(input);
+
+        const formButton = createActionButton(["todo-button", "home-edit-button"], "none", editIcon, pID, todoID);
+        const delbutton = createActionButton(["todo-button", "home-del-button"], "none", delIcon, pID, todoID);
+        const buttons = [formButton, delbutton];
+        todoActionsHover(todoContainer, buttons);
+        todoContainer.appendChild(formButton);
+        todoContainer.appendChild(delbutton);
+
+        return todoContainer;
+    };
+
+    const renderProjectHome = (project) => {
+        const projectDiv = document.createElement("div");
+        projectDiv.classList.add("home-item");
+        projectDiv.setAttribute("proID", project.getId());
+        const projectTitle = document.createElement("div");
+        projectTitle.classList.add("project-title-home");
+        projectTitle.setAttribute("proID", project.getId());
+        projectTitle.textContent = project.getTitle();
+        const addbutton = createActionButton(["todo-button", "add-new-task"], "none", addIcon, project.getId());
+        const buttons = [addbutton];
+        todoActionsHover(projectDiv, buttons);
+        projectTitle.appendChild(addbutton);
+        projectDiv.appendChild(projectTitle);
+
+        const todos = document.createElement("div");
+        todos.classList.add("home-content-item");
+        todos.setAttribute("proID", project.getId());
+        const proTodos = project.getTodoAll();
+        proTodos.forEach((todo) => {
+            todos.appendChild(renderTodoHome(project.getId(), todo));
+        });
+        projectDiv.appendChild(todos);
+        document.querySelector(".content").appendChild(projectDiv);
+    };
+
+    const renderHome = (projects) => {
         const headerDiv = document.querySelector(".header");
         headerDiv.innerHTML = "";
         document.querySelector(".content").innerHTML = "";
+
+        const proTitleContainer = document.createElement("div");
+        proTitleContainer.classList.add("header-title-container");
+        proTitleContainer.classList.add("topdown-animation");
+        proTitleContainer.textContent = "Home";
+        headerDiv.appendChild(proTitleContainer);
+
+        projects.forEach((project) => {
+            renderProjectHome(project);
+        });
     };
 
-    return { fav_icon, loginForm, renderSidebar, updateName, renderProject, editToDo, saveToDo, remToDo, editProject, saveProject, addNewTodo, renderNewTodo, removeNewTodo, addNewProject, renderProjectName, renderHome, delProjectName };
+
+    const homeRenderNewTodo = (pID) => {
+        const todoID = "new-todo";
+        const mbitem = document.createElement("div");
+        mbitem.classList.add("content-item");
+        mbitem.classList.add("item-home-popup");
+        mbitem.setAttribute("proID", pID);
+        mbitem.setAttribute("todoID", todoID);
+        const todoForm = document.createElement("form");
+        todoForm.classList.add("todo-form");
+        const title = "Task Name";
+        const desc = "Task Description";
+        let dt = new Date();
+        dt = dt.toISOString().slice(0, 10);
+        const notes = "Add Notes";
+        todoForm.appendChild(renderInputElement("input", "Title-" + todoID + pID, "ToDo-Title", title, "todo-title", "TITLE", "text", false, true));
+        todoForm.appendChild(renderInputElement("input", "Desc-" + todoID + pID, "ToDo-Desc", desc, "todo-desc", "DESCRIPTION", "text", false, true));
+        todoForm.appendChild(renderInputElement("input", "Date-" + todoID + pID, "ToDo-Date", dt, "todo-date", "DUE DATE", "date", false, true));
+        todoForm.appendChild(renderInputElement("textarea", "Notes-" + todoID + pID, "ToDo-Notes", notes, "todo-notes", "NOTES", null, false, true));
+
+        const fieldset = document.createElement("fieldset");
+        const legend = document.createElement("legend");
+        legend.textContent = "COMPLETION STATUS";
+        const div = document.createElement("div");
+        div.classList.add("todo-status");
+        const input = document.createElement("input");
+        input.setAttribute("type", "checkbox");
+        input.setAttribute("id", "Status-" + todoID + pID);
+        input.setAttribute("name", "ToDo-Status");
+        input.classList.add("todo-status-box");
+        input.setAttribute("proID", pID);
+        input.setAttribute("todoID", todoID);
+        input.checked = false;
+        const label = document.createElement("label");
+        label.setAttribute("for", "Status-" + todoID + pID);
+        label.textContent = "Completed";
+        div.appendChild(input);
+        div.appendChild(label);
+        fieldset.appendChild(legend);
+        fieldset.appendChild(div);
+        todoForm.appendChild(fieldset);
+
+        const todoPriorityDiv = document.createElement("div");
+        todoPriorityDiv.classList.add("todo-priority");
+
+        const label1 = document.createElement("label");
+        label1.setAttribute("for", "Priority-" + todoID + pID);
+        label1.textContent = "PRIORITY";
+
+        // Create a select element
+        const select = document.createElement("select");
+        select.setAttribute("name", "Priority");
+        select.setAttribute("id", "Priority-" + todoID + pID);
+
+        // Create an array of priority options
+        const priorityOptions = [
+            "Urgent",
+            "Very Important",
+            "Important",
+            "Reminder",
+            "Casual"
+        ];
+
+        // Create and append option elements to the select element
+        priorityOptions.forEach(function (optionText, index) {
+            const option = document.createElement("option");
+            option.setAttribute("value", index); // Set the value as the index (starting from 0)
+            option.textContent = optionText;
+            select.appendChild(option);
+        });
+
+        // Append the label and select elements to the todoPriorityDiv
+        select.selectedIndex = 0;
+        select.disabled = false;
+        const selectDiv = document.createElement("div");
+        selectDiv.classList.add("select-container");
+        selectDiv.appendChild(select);
+
+        const priorCol = document.createElement("div");
+        priorCol.classList.add("prior-color");
+        priorCol.style.backgroundColor = getPriCol(parseInt(select.value));
+
+        select.addEventListener("change", (event) => {
+            priorCol.style.backgroundColor = getPriCol(parseInt(select.value));
+        });
+
+        selectDiv.appendChild(priorCol);
+        todoPriorityDiv.appendChild(label1);
+        todoPriorityDiv.appendChild(selectDiv);
+        todoForm.appendChild(todoPriorityDiv);
+
+        const formButton = createActionButton(["todo-button", "edit-new-button"], "none", saveIcon, pID, todoID);
+        const delbutton = createActionButton(["todo-button", "del-new-button"], "none", delIcon, pID, todoID);
+        const buttons = [formButton, delbutton];
+        todoActionsHover(mbitem, buttons);
+
+        todoForm.appendChild(formButton);
+        todoForm.appendChild(delbutton);
+        mbitem.appendChild(todoForm);
+        const parent = document.querySelector(`.home-content-item[proID="${pID}"]`);
+        parent.appendChild(mbitem);
+        parent.classList.add("popup-active");
+
+    };
+
+    const homeRemoveNewTodo = (pID) => {
+        document.querySelector(`.content-item[proID="${pID}"]`).remove();
+        document.querySelector(`.home-content-item[proID="${pID}"]`).classList.remove("popup-active");
+    };
+
+    const homeAddNewTodo = (pID, todo) => {
+        homeRemoveNewTodo(pID);
+        document.querySelector(`.home-content-item[proID="${pID}"]`).appendChild(renderTodoHome(pID, todo));
+    };
+
+    return { fav_icon, loginForm, renderSidebar, updateName, renderProject, editToDo, saveToDo, remToDo, editProject, saveProject, addNewTodo, renderNewTodo, removeNewTodo, addNewProject, renderProjectName, renderHome, delProjectName, homeRenderNewTodo, homeRemoveNewTodo, homeAddNewTodo };
 }

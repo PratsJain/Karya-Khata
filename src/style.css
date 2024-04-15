@@ -12,7 +12,7 @@
     --backdrop-col: black;
     --button-border-radius: 30px;
     --input-border-radius: 30px;
-    --card-border-radius: 25px;
+    --card-border-radius: 15px;
     --box-shadow-col: rgba(0, 0, 0, 0.2);
     --card-shadow: 2px 2px 10px 0px var(--box-shadow-col);
     --font-color: black;
@@ -292,7 +292,7 @@ button:hover {
     gap: 10px;
 }
 
-.sidebar-widget {
+.sidebar-widget, .sidebar-widget-fixed {
     grid-column: 1 / 3;
     display: grid;
     grid-template-columns: subgrid;
@@ -312,7 +312,7 @@ button:hover {
 }
 .mainboard {
     padding: var(--container-level-padding);
-    background-color: var(--board-bkc);
+    background-color: #eff6ff;
     display: grid;
     grid-template-rows: 60px auto;
     padding: 20px;
@@ -430,10 +430,14 @@ textarea:focus {
     width: auto;
 }
 
+fieldset {
+    width: auto;
+}
 .todo-status {
     display: flex;
     gap: 15px;
     align-items: center;
+    justify-content: space-between;
 }
 
 input[type='checkbox'] {
@@ -441,8 +445,9 @@ input[type='checkbox'] {
     height: 18px;
     width: 20px;
     border-radius: 50px;
+    text-align: center;
     border: 1px solid black;
-    display: inline;
+    /* display: inline; */
     background-color: var(--bkg-color);
     cursor: pointer;
 }
@@ -462,19 +467,19 @@ input[type='checkbox']:checked {
 input[type="checkbox"]::after {
     content: "✔";
     display: block;
-    width: 10px;
-    height: 10px;
+    width: 15px;
+    height: 15px;
     position: absolute;
     color: white;
-    left: 18%;
-    transform: translate(0%, 0%) scale(0);
-    border-radius: 2px;
+    left: 2px;
+    transform: scale(0);
+    /* border-radius: 2px; */
     transition: transform 0.2s ease;
 }
 
 /* Show the checkmark icon when checkbox is checked */
 input[type="checkbox"]:checked::after {
-    transform: translate(0%, 0%) scale(0.8);
+    transform: scale(0.8);
 }
 
 
@@ -527,6 +532,7 @@ button {
     right: 35px;
 }
 
+
 .todo-button:hover {
     opacity: 1;
 }
@@ -545,3 +551,150 @@ button {
     top: var(--container-level-padding);
     right: 10px;
 }
+
+.home-item {
+    display: grid;
+    grid-template-rows: 50px 300px;
+    gap: 25px;
+}
+
+.project-title-home {
+    /* height: 50px; */
+    padding: 10px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    background-color: var(--bkg-color);
+    border-radius: var(--card-border-radius);
+    box-shadow: var(--card-shadow);
+    font-size: var(--font-size-2);
+}
+
+.add-new-task {
+    top: 13px;
+    right: 10px;
+}
+
+.home-content-item {
+    background-color: var(--bkg-color);
+    border-radius: var(--card-border-radius);
+    box-shadow: var(--card-shadow);
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    position: relative;
+}
+.popup-active {
+    overflow: hidden;
+}
+
+.item-home-popup {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    bottom: 0px;
+    right: 0px;
+    /* height: 100%; */
+    /* width: 100%; */
+    overflow-y: auto;
+}
+
+.todo-home-container {
+    position: relative;
+    background-color: var(--bkg-color);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    padding: 20px;
+    padding-right: 30px;
+    justify-content: space-between;
+    box-shadow: var(--card-shadow);
+}
+
+.todo-home-container:hover {
+    border-right: 2px solid var(--peach-col-3);
+    border-top: 2px solid var(--peach-col-3);
+    border-bottom: 2px solid var(--peach-col-3);
+}
+
+.home-todo-info {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.home-todo-title {
+    font-size: var(--font-size-2);
+    font-weight: bold;
+    /* color: var(--font-color); */
+}
+
+.home-todo-date {
+    font-size: var(--font-size-3);
+}
+
+.home-del-button  {
+    right: 10px;
+    top: 10px;
+    height: 20px;
+    width: 20px;
+}
+
+.home-edit-button {
+    right: 30px;
+    top: 10px;
+    height: 20px;
+    width: 20px;
+}
+
+.home-del-button img, .home-edit-button img {
+    height: 15px;
+    width: 15px;
+}
+
+.todo-home-container input[type='checkbox'] {
+    height: 20px;
+    width: 20px;
+} 
+
+.prior-1 {
+    border-left: 5px solid red;
+}
+
+.prior-2 {
+    border-left: 5px solid orange;
+}
+.prior-3 {
+    border-left: 5px solid yellow;
+}
+.prior-4 {
+    border-left: 5px solid blue;
+}
+.prior-5 {
+    border-left: 5px solid aqua;
+}
+
+/* width */
+::-webkit-scrollbar {
+    width: 5px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    height: 50%;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #888;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
