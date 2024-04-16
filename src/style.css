@@ -574,18 +574,29 @@ button {
     top: 13px;
     right: 10px;
 }
-
+.home-item-container {
+    /* background-color: var(--bkg-color); */
+    border-radius: var(--card-border-radius);
+    box-shadow: var(--card-shadow);
+    overflow: hidden;
+    position: relative;
+}
 .home-content-item {
     background-color: var(--bkg-color);
     border-radius: var(--card-border-radius);
-    box-shadow: var(--card-shadow);
+    /* box-shadow: var(--card-shadow); */
     padding: 10px;
     display: flex;
     flex-direction: column;
     gap: 10px;
     overflow-y: auto;
     overflow-x: hidden;
-    position: relative;
+    /* position: relative; */
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
 }
 .popup-active {
     overflow: hidden;
@@ -597,8 +608,6 @@ button {
     left: 0px;
     bottom: 0px;
     right: 0px;
-    /* height: 100%; */
-    /* width: 100%; */
     overflow-y: auto;
 }
 
@@ -612,12 +621,15 @@ button {
     padding-right: 30px;
     justify-content: space-between;
     box-shadow: var(--card-shadow);
+    /* --priority-color: red; */
+    /* border-left: 5px solid var(--priority-color); */
 }
 
 .todo-home-container:hover {
     border-right: 2px solid var(--peach-col-3);
     border-top: 2px solid var(--peach-col-3);
     border-bottom: 2px solid var(--peach-col-3);
+    cursor: pointer;
 }
 
 .home-todo-info {

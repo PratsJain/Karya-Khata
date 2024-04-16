@@ -141,6 +141,37 @@ const app = (function ScreenController() {
         }
     };
 
+    const homeEditTodo = (proID, todoID) => {
+        const title = document.getElementById("Title-" + todoID + proID).value;
+        const desc = document.getElementById("Desc-" + todoID + proID).value;
+        const notes = document.getElementById("Notes-" + todoID + proID).value;
+        const dueDate = document.getElementById("Date-" + todoID + proID).value;
+        const prior = parseInt(document.getElementById("Priority-" + todoID + proID).value) + 1;
+        const status = document.getElementById("Status-" + todoID + proID).checked;
+        user.updateTodo(proID, todoID, title, desc, notes, dueDate, prior, status);
+    };
+
+    const homeInfoTodo = (pID, todoID) => {
+
+        if (!document.querySelector(`.content-item[todoID="${todoID}"][proID="${pID}"]`)) {
+            front.homeRenderNewTodo(pID, todoID, user.getProject(pID).getTodo(todoID));
+
+            document.querySelector(`.edit-new-button[todoID="${todoID}"][proID="${pID}"]`).addEventListener('click', (event) => {
+                event.preventDefault();
+                homeEditTodo(pID, todoID);
+                front.homeRemoveNewTodo(pID);
+                front.homeUpdateTodo(user.getProject(pID).getTodo(todoID));
+            });
+
+            document.querySelector(`.del-new-button[todoID="${todoID}"][proID="${pID}"]`).addEventListener('click', (event) => {
+                event.preventDefault();
+                user.remTodo(pID, todoID);
+                front.homeRemoveNewTodo(pID);
+                front.homeRemTodo(todoID);
+            });
+        }
+    };
+
     document.querySelector(".login-form-container").addEventListener("submit", (event) => {
         event.preventDefault();
         const fname = document.querySelector("#fname").value;
@@ -158,7 +189,12 @@ const app = (function ScreenController() {
         if (button.classList.contains("add-new-task")) {
             homeAddNewTodo(pID);
         }
+        else {
+            const todoID = button.getAttribute("todoID");
+            homeInfoTodo(pID, todoID);
+        }
     };
+
     const renderHome = () => {
         front.renderHome(user.getProjectAll());
 
@@ -166,6 +202,12 @@ const app = (function ScreenController() {
         todoButtons.forEach((button) => {
             button.addEventListener('click', () => {
                 homeTodoActionHandler(button);
+            });
+        });
+
+        document.querySelectorAll(".todo-home-container").forEach((todoEL) => {
+            todoEL.addEventListener("click", () => {
+                homeTodoActionHandler(todoEL);
             });
         });
 
