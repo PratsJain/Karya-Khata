@@ -595,6 +595,7 @@ export default function frontend() {
         todosContainer.setAttribute("proID", project.getId());
         todosContainer.appendChild(todos);
         projectDiv.appendChild(todosContainer);
+        projectDiv.classList.add("topdown-animation");
         document.querySelector(".content").appendChild(projectDiv);
     };
 

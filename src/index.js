@@ -184,8 +184,12 @@ const app = (function ScreenController() {
     });
 
 
-    const homeTodoActionHandler = (button) => {
+    const homeTodoActionHandler = (button, event) => {
         const pID = button.getAttribute("proID");
+        
+        if (event.target.classList.contains("todo-status-box")) {
+            return;
+        }
         if (button.classList.contains("add-new-task")) {
             homeAddNewTodo(pID);
         }
@@ -200,14 +204,14 @@ const app = (function ScreenController() {
 
         const todoButtons = document.querySelectorAll(".todo-button");
         todoButtons.forEach((button) => {
-            button.addEventListener('click', () => {
-                homeTodoActionHandler(button);
+            button.addEventListener('click', (event) => {
+                homeTodoActionHandler(button, event);
             });
         });
 
         document.querySelectorAll(".todo-home-container").forEach((todoEL) => {
-            todoEL.addEventListener("click", () => {
-                homeTodoActionHandler(todoEL);
+            todoEL.addEventListener("click", (event) => {
+                homeTodoActionHandler(todoEL, event);
             });
         });
 
