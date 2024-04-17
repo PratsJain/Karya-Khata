@@ -2,35 +2,74 @@
     font-family: 'neon';
     src: url('./assets/font.ttf') format('truetype');
 }
+
 :root {
     --font-size-1: 20px;
     --font-size-2: 18px;
     --font-size-3: 15px;
     --font-size-4: 13px;
-    --sidebar-bkc: #082f49;
+    
     --container-level-padding: 20px;
     --backdrop-col: black;
     --button-border-radius: 30px;
     --input-border-radius: 30px;
     --card-border-radius: 15px;
-    --box-shadow-col: rgba(0, 0, 0, 0.2);
-    --card-shadow: 2px 2px 10px 0px var(--box-shadow-col);
-    --font-color: black;
     --sidebar-font-color: white;
+    --col-1: #f0f9ff;
+    --col-2: #e0f2fe;
+    --col-3: #bae6fd;
+    --col-4: #7dd3fc;
+    --col-5: #38bdf8;
+    --col-6: #0ea5e9;
+    --col-7: #0284c7;
+    --col-8: #0369a1;
+    --col-9: #075985;
+    --col-10: #0c4a6e;
+    --col-11: #082f49;
+    --sidebar-bkc: var(--col-11);
+}
+:root.light {
+   
+    --box-shadow-col: rgba(0, 0, 0, 0.2);
+    --card-shadow: 2px 2px 4px 0px var(--box-shadow-col);
+    --font-color: black;
     color: var(--font-color);
-    --peach-col-1: #fff1f2;
-    --peach-col-2: #ffe4e6;
-    --peach-col-3: #fecdd3;
-    --peach-col-4: #fda4af;
-    --peach-col-5: #fb7185;
-    --peach-col-6: #f43f5e;
-    --peach-col-7: #e11d48;
-    --peach-col-8: #be123c; 
+    
     --bkg-color: white;
-    --board-bkc: var(--peach-col-1);
+    --board-bkc: var(--col-1);
+    /* --bkg-color: var(--col-1);
+    --board-bkc: white; */
     --icon-filter: invert(0);
+    --hover-col: var(--col-2);
+    --log-button-bkg: var(--col-11);
+    --sidebar-bkc: var(--col-11);
+    --input-col-scheme: light;
+    --notes-col: var(--col-2);
+    --notes-col-hover: var(--col-3);
 }
 
+
+:root.dark {
+    --box-shadow-col: rgba(0, 0, 0, 0.2);
+    --card-shadow: 2px 2px 4px 0px var(--box-shadow-col);
+    --font-color: white;
+    color: var(--font-color);
+
+    --bkg-color: #2a3c49;
+    --board-bkc: #05111a;
+    --icon-filter: invert(1);
+    --hover-col: var(--col-11);
+    --log-button-bkg: var(--col-4);
+    --sidebar-bkc: var(--col-11);
+    --input-col-scheme: dark;
+    --notes-col: var(--col-10);
+    --notes-col-hover: var(--col-11);
+}
+
+
+input {
+    color-scheme: var(--input-col-scheme);
+}
 * {
     margin: 0;
     padding: 0;
@@ -66,6 +105,7 @@ textarea, option {
     display: none;
     transition: opacity 300ms, display 300ms allow-discrete;
     transition-delay: 100ms;
+    z-index: 10;
 }
 
 .popup-modal {
@@ -104,6 +144,7 @@ input {
 .login-form-container input {
     width: 100%;
     height: 25px;
+    font: inherit;
 }
 
 .login-form-container label {
@@ -118,14 +159,16 @@ input {
     border: 1px solid silver;
     border-radius: var(--input-border-radius);
     padding-left: 10px;
+    background-color: var(--bkg-color);
 }
 
 .login-form-container input:hover {
-    background-color: aliceblue;
+    background-color: var(--hover-col);
 }
 
 .login-form-container input:focus {
-    background-color: var(--bkg-color);
+    background-color: var(--hover-col);
+    border: 1px solid var(--col-11);
     outline: none;
     
 }
@@ -137,8 +180,8 @@ input {
     height: 2rem;
     margin-top: 20px;
     border-radius: var(--button-border-radius);
-    background-color: var(--sidebar-bkc);
-    color: white;
+    background-color: var(--log-button-bkg);
+    color: var(--bkg-color);
     outline: none;
     box-shadow: none;
 }
@@ -175,6 +218,7 @@ button:hover {
     opacity: 30%;
     display: block;
     pointer-events: all;
+    z-index: 10;
 }
 
 .popup-modal.show {
@@ -182,6 +226,7 @@ button:hover {
     display: block;
     pointer-events: all;
     transform: translate(-50%, -50%);
+    z-index: 11;
   }
 
   @starting-style {
@@ -223,19 +268,18 @@ button:hover {
     align-items: center;
     padding: 10px;
     font-size: var(--font-size-2);
-    border: 2px solid var(--peach-col-4);
+    border: 2px solid var(--col-2);
     border-radius: 40px;
 }
 
 .name-card:hover {
-    border: 2px solid var(--peach-col-5);
-    color: var(--peach-col-5);
+    border: 2px solid var(--col-3);
+    color: var(--col-3);
 }
 
 
 .sidebar-anim {
     animation: sidebar_items 500ms ease-out 100ms 1;
-
 }
 
 @keyframes sidebar_items {
@@ -272,16 +316,16 @@ button:hover {
     font-size: var(--font-size-2);
     background-color: var(--sidebar-bkc);
     border-radius: var(--button-border-radius);
-    border: 2px solid var(--peach-col-3);
-    color: var(--peach-col-3);
+    border: 2px solid var(--col-2);
+    color: inherit;
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
 .create-pro:hover {
-    border: 2px solid var(--peach-col-5);
-    color: var(--peach-col-5);
+    border: 2px solid var(--col-3);
+    color: var(--col-3);
 }
 .user-projects {
     display: grid;
@@ -300,8 +344,9 @@ button:hover {
     transition: transform 300ms ease-in-out;
 }
 
+
 .sidebar-widget:hover {
-    color: var(--peach-col-5);
+    color: var(--col-4);
     cursor: pointer;
     transform: translateX(10px);
 }
@@ -312,7 +357,7 @@ button:hover {
 }
 .mainboard {
     padding: var(--container-level-padding);
-    background-color: #eff6ff;
+    background-color: var(--board-bkc);
     display: grid;
     grid-template-rows: 60px auto;
     padding: 20px;
@@ -340,6 +385,7 @@ button:hover {
     display: flex;
     align-items: center;
     justify-content: center;
+    color: var(--font-color);
     border-radius: 40px;
     box-shadow: var(--card-shadow);
 }
@@ -392,7 +438,7 @@ button:hover {
 }
 
 /* textarea {
-    background-color: var(--peach-col-1);
+    background-color: var(--col-1);
 } */
 
 
@@ -418,11 +464,13 @@ button:hover {
 } */
 
 textarea {
-    background-color: var(--peach-col-1);
+    padding: 5px;
+    border-radius: 15px;
+    background-color: var(--notes-col);
 }
 
 textarea:focus {
-    background-color: var(--peach-col-2);
+    background-color: var(--notes-col-hover);
     
 }
 
@@ -446,7 +494,7 @@ input[type='checkbox'] {
     width: 20px;
     border-radius: 50px;
     text-align: center;
-    border: 1px solid black;
+    border: 1px solid var(--font-color);
     /* display: inline; */
     background-color: var(--bkg-color);
     cursor: pointer;
@@ -487,6 +535,7 @@ select, option {
     font: inherit;
     color: var(--font-color);
     width: 100px;
+    background-color: var(--bkg-color);
 }
 
 .select-container {
@@ -514,7 +563,7 @@ button {
     height: 30px;
     /* top: -6%; */
     border-radius: var(--button-border-radius);
-    background-color: white;
+    background-color: var(--bkg-color);
     outline: none;
     box-shadow: none;
     border: none;
@@ -540,6 +589,7 @@ button {
 .todo-button-img {
     height: 20px;
     width: 20px;
+    filter: var(--icon-filter);
 }
 
 .edit-project-button, .save-project-button {
@@ -626,9 +676,10 @@ button {
 }
 
 .todo-home-container:hover {
-    border-right: 2px solid var(--peach-col-3);
-    border-top: 2px solid var(--peach-col-3);
-    border-bottom: 2px solid var(--peach-col-3);
+    /* border-right: 2px solid var(--col-3);
+    border-top: 2px solid var(--col-3);
+    border-bottom: 2px solid var(--col-3); */
+    background-color: var(--hover-col);
     cursor: pointer;
 }
 
@@ -665,6 +716,7 @@ button {
 .home-del-button img, .home-edit-button img {
     height: 15px;
     width: 15px;
+    filter: var(--icon-filter)
 }
 
 .todo-home-container input[type='checkbox'] {

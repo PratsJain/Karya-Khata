@@ -13,6 +13,7 @@ import { format } from 'date-fns';
 
 export default function frontend() {
 
+    document.documentElement.className = "dark";
     document.querySelector(".backdrop").addEventListener("click", () => {
         document.querySelector('.backdrop').classList.toggle("show");
         document.querySelector('.popup-modal').classList.toggle("show");
@@ -20,11 +21,14 @@ export default function frontend() {
 
     document.querySelector('.theme').addEventListener("click", () => {
         const themeIcon = document.querySelector('.theme-icon');
+        const root = document.documentElement;
         if (themeIcon.src === moonicon) {
             themeIcon.src = sunIcon;
+            root.className = "dark";
         }
         else {
             themeIcon.src = moonicon;
+            root.className = "light";
         }
     });
 
@@ -40,7 +44,7 @@ export default function frontend() {
         }
         document.head.appendChild(favicon);
         const themeIcon = new Image();
-        themeIcon.src = moonicon;
+        themeIcon.src = sunIcon;
         themeIcon.classList.add('theme-icon');
         const themeButton = document.querySelector('.theme');
         themeButton.appendChild(themeIcon);
@@ -61,7 +65,8 @@ export default function frontend() {
         try {
             document.querySelector(".user-name").textContent = uname;
             const ncard = document.querySelector(".name-card.sidebar-anim");
-            ncard.classList.toggle('.sidebar-anim');
+            ncard.classList.remove('.sidebar-anim');
+            // ncard.classList.add('.sidebar-anim');
             // ncard.classList.add('.sidebar-anim');
             // ncard.style.display = 'none';
             // ncard.style.display = 'flex';
