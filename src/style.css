@@ -207,6 +207,9 @@ button:hover {
     display: flex;
     align-items: center;
     justify-content: center;
+    --anim-delay: 200ms;
+    --anim-dur: 500ms;
+    --anim-init-pos: -100px;
 }
 
 .theme-icon {
@@ -279,30 +282,58 @@ button:hover {
 
 
 .sidebar-anim {
-    animation: sidebar_items 500ms ease-out 100ms 1;
+    animation: sidebar_items var(--anim-dur) ease-in-out var(--anim-delay) 1 both;
 }
 
 @keyframes sidebar_items {
     0% {
-        transform: translateX(-100px);
+        transform: translateX(var(--anim-init-pos));
     }
     100% {
         transform: translateX(0);
     }
 }
 
+.reverse-sidebar-anim {
+    animation: sidebar_items_new var(--anim-dur) ease-in-out var(--anim-delay) 1 both;
+}
+
+@keyframes sidebar_items_new {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(var(--anim-init-pos));
+    }
+}
+
+
 .topdown-animation {
-    animation: topdowntrans 500ms ease-in-out 100ms 1 both;
+    animation: topdowntrans var(--anim-dur) ease-in-out var(--anim-delay) 1 both;
 }
 
 @keyframes topdowntrans {
     0% {
-        transform: translateY(-100px);
+        transform: translateY(var(--anim-init-pos));
     }
     100% {
         transform: translateY(0);
     }
 }
+
+.downup-anim {
+    animation: downuptrans var(--anim-dur) ease-in-out var(--anim-delay) 1 both;
+}
+
+@keyframes downuptrans {
+    0% {
+        transform: translateY(0);
+    }
+    100% {
+        transform: translateY(var(--anim-init-pos));
+    }
+}
+
 
 .create-pro {
     appearance: none;
@@ -344,6 +375,11 @@ button:hover {
     transition: transform 300ms ease-in-out;
 }
 
+.sidebar-widget, .sidebar-widget-fixed, .name-card, .create-pro {
+    --anim-delay: 100ms;
+    --anim-dur: 500ms;
+    --anim-init-pos: -100px;
+}
 
 .sidebar-widget:hover {
     color: var(--col-4);
@@ -388,6 +424,13 @@ button:hover {
     color: var(--font-color);
     border-radius: 40px;
     box-shadow: var(--card-shadow);
+    --anim-dur: 500ms;
+    --anim-delay: 100ms;
+    --anim-init-pos: -100px;
+}
+
+.add-todo-button {
+    --anim-delay: 200ms;
 }
 
 .header-title {
@@ -618,6 +661,9 @@ button {
     border-radius: var(--card-border-radius);
     box-shadow: var(--card-shadow);
     font-size: var(--font-size-2);
+    --anim-delay: 700ms;
+    --anim-dur: 400ms;
+    --anim-init-pos: -100px;
 }
 
 .add-new-task {
@@ -630,6 +676,9 @@ button {
     box-shadow: var(--card-shadow);
     overflow: hidden;
     position: relative;
+    --anim-delay: 300ms;
+    --anim-dur: 400ms;
+    --anim-init-pos: -500px;
 }
 .home-content-item {
     background-color: var(--bkg-color);
@@ -659,6 +708,9 @@ button {
     bottom: 0px;
     right: 0px;
     overflow-y: auto;
+    --anim-delay: 100ms;
+    --anim-dur: 500ms;
+    --anim-init-pos: -500px;
 }
 
 .todo-home-container {
@@ -671,6 +723,9 @@ button {
     padding-right: 30px;
     justify-content: space-between;
     box-shadow: var(--card-shadow);
+    --anim-delay: 1000ms;
+    --anim-dur: 500ms;
+    --anim-init-pos: -500px;
     /* --priority-color: red; */
     /* border-left: 5px solid var(--priority-color); */
 }

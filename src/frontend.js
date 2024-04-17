@@ -65,7 +65,7 @@ export default function frontend() {
         try {
             document.querySelector(".user-name").textContent = uname;
             const ncard = document.querySelector(".name-card.sidebar-anim");
-            ncard.classList.remove('.sidebar-anim');
+            // ncard.classList.remove('.sidebar-anim');
             // ncard.classList.add('.sidebar-anim');
             // ncard.classList.add('.sidebar-anim');
             // ncard.style.display = 'none';
@@ -528,6 +528,7 @@ export default function frontend() {
         const todoID = todo.getId();
         const todoContainer = document.createElement("div");
         todoContainer.classList.add("todo-home-container");
+        todoContainer.classList.add("sidebar-anim");
         todoContainer.classList.add(`prior-${todo.getPrior()}`);
         todoContainer.setAttribute("id", "todocard-" + todo.getId());
         todoContainer.setAttribute("proID", pID);
@@ -575,6 +576,7 @@ export default function frontend() {
         projectDiv.setAttribute("proID", project.getId());
         const projectTitle = document.createElement("div");
         projectTitle.classList.add("project-title-home");
+        projectTitle.classList.add("topdown-animation");
         projectTitle.setAttribute("proID", project.getId());
         projectTitle.textContent = project.getTitle();
         const addbutton = createActionButton(["todo-button", "add-new-task"], "none", addIcon, project.getId());
@@ -592,10 +594,10 @@ export default function frontend() {
         });
         const todosContainer = document.createElement("div");
         todosContainer.classList.add("home-item-container");
+        todosContainer.classList.add("topdown-animation");
         todosContainer.setAttribute("proID", project.getId());
         todosContainer.appendChild(todos);
         projectDiv.appendChild(todosContainer);
-        projectDiv.classList.add("topdown-animation");
         document.querySelector(".content").appendChild(projectDiv);
     };
 
@@ -620,6 +622,7 @@ export default function frontend() {
         const mbitem = document.createElement("div");
         mbitem.classList.add("content-item");
         mbitem.classList.add("item-home-popup");
+        mbitem.classList.add("topdown-animation");
         mbitem.setAttribute("proID", pID);
         mbitem.setAttribute("todoID", todoID);
         const todoForm = document.createElement("form");
@@ -731,8 +734,12 @@ export default function frontend() {
     };
 
     const homeRemoveNewTodo = (pID) => {
-        document.querySelector(`.content-item[proID="${pID}"]`).remove();
-        // document.querySelector(`.home-content-item[proID="${pID}"]`).classList.remove("popup-active");
+        const el = document.querySelector(`.content-item[proID="${pID}"]`);
+        el.classList.remove("topdown-animation");
+        el.classList.add("downup-anim");
+        el.addEventListener("animationend", function() {
+            el.remove();
+        });
     };
 
     const homeAddNewTodo = (pID, todo) => {
@@ -753,7 +760,12 @@ export default function frontend() {
     };
 
     const homeRemTodo = (todoID) => {
-        document.querySelector(`.todo-home-container[todoID="${todoID}"]`).remove();
+        const el = document.querySelector(`.todo-home-container[todoID="${todoID}"]`);
+        el.classList.remove("sidebar-anim");
+        el.classList.add("reverse-sidebar-anim");
+        el.addEventListener("animationend", function() {
+            el.remove();
+        });
     };
 
     return { fav_icon, loginForm, renderSidebar, updateName, renderProject, editToDo, saveToDo, remToDo, editProject, saveProject, addNewTodo, renderNewTodo, removeNewTodo, addNewProject, renderProjectName, renderHome, delProjectName, homeRenderNewTodo, homeRemoveNewTodo, homeAddNewTodo, homeUpdateTodo, homeRemTodo };
