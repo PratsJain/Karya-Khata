@@ -186,7 +186,7 @@ const app = (function ScreenController() {
 
     const homeTodoActionHandler = (button, event) => {
         const pID = button.getAttribute("proID");
-        
+
         if (event.target.classList.contains("todo-status-box")) {
             return;
         }
@@ -201,7 +201,8 @@ const app = (function ScreenController() {
 
     const renderHome = () => {
         front.renderHome(user.getProjectAll());
-
+        front.resetSidebar();
+        front.selectSidebarItem();
         const todoButtons = document.querySelectorAll(".todo-button");
         todoButtons.forEach((button) => {
             button.addEventListener('click', (event) => {
@@ -224,6 +225,8 @@ const app = (function ScreenController() {
     };
 
     const renderProject = (project) => {
+        front.resetSidebar();
+        front.selectSidebarItem(project);
         front.renderProject(user, project.getAttribute("proID"));
 
         const todoButtons = document.querySelectorAll(".todo-button");

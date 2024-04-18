@@ -8,7 +8,7 @@ import delIcon from './assets/delete.png';
 import saveIcon from './assets/save.png';
 import addIcon from './assets/add.png';
 import { format } from 'date-fns';
-// import { container } from 'webpack';
+
 
 
 export default function frontend() {
@@ -61,6 +61,22 @@ export default function frontend() {
         document.querySelector('.backdrop').classList.toggle("show");
         document.querySelector('.popup-modal').classList.toggle("show");
     };
+
+    const resetSidebar = () => {
+        const allProjects = document.querySelectorAll(".project-tile");
+        allProjects.forEach((project) => {
+            project.classList.remove("selected");
+            project.classList.add("unselected");
+        });
+        document.querySelector(".home-tile").classList.remove("selected");
+        document.querySelector(".home-tile").classList.add('unselected');
+    };
+
+    const selectSidebarItem = (el=document.querySelector(".home-tile")) => {
+        el.classList.remove("unselected");
+        el.classList.add("selected");
+    };
+
     const updateName = (uname) => {
         try {
             document.querySelector(".user-name").textContent = uname;
@@ -94,6 +110,7 @@ export default function frontend() {
 
     const editToDo = (todoID, button) => {
         document.getElementById("Title-" + todoID).disabled = false;
+        document.getElementById("Title-" + todoID).focus();
         document.getElementById("Desc-" + todoID).disabled = false;
         document.getElementById("Notes-" + todoID).disabled = false;
         document.getElementById("Date-" + todoID).disabled = false;
@@ -123,8 +140,12 @@ export default function frontend() {
     };
 
     const remToDo = (todoID) => {
-        const todoDiv = document.querySelector(`.content-item[todoID='${todoID}']`);
-        todoDiv.remove();
+        const el = document.querySelector(`.content-item[todoID='${todoID}']`);
+        el.classList.remove("topdown-animation");
+        el.classList.add("downup-anim");
+        el.addEventListener("animationend", function() {
+            el.remove();
+        });
     };
 
     const addNewTodo = (pID, todo) => {
@@ -133,10 +154,16 @@ export default function frontend() {
     };
 
     const removeNewTodo = () => {
-        document.querySelector(".content-item[todoID='new-todo']").remove();
+        const el = document.querySelector(".content-item[todoID='new-todo']");
+        el.classList.remove("topdown-animation");
+        el.classList.add("downup-anim");
+        el.addEventListener("animationend", function() {
+            el.remove();
+        });
     };
     const editProject = (pID, button) => {
         document.getElementById("Title-" + pID).disabled = false;
+        document.getElementById("Title-" + pID).focus();
         button.querySelector("img").src = saveIcon;
         button.classList.remove("edit-project-button");
         button.classList.add("save-project-button");
@@ -315,8 +342,9 @@ export default function frontend() {
         todoForm.appendChild(formButton);
         todoForm.appendChild(delbutton);
         mbitem.appendChild(todoForm);
+        mbitem.classList.add("topdown-animation");
         parent.appendChild(mbitem);
-
+        document.getElementById("Title-" + todoID).focus();
     };
 
     const renderTodo = (pID, todo, isDisable = true) => {
@@ -412,6 +440,7 @@ export default function frontend() {
         todoForm.appendChild(formButton);
         todoForm.appendChild(delbutton);
         mbitem.appendChild(todoForm);
+        mbitem.classList.add("topdown-animation");
         document.querySelector(".content").appendChild(mbitem);
 
     };
@@ -431,7 +460,10 @@ export default function frontend() {
         proTitle.setAttribute("name", "Project Title");
         proTitle.classList.add("header-title");
         proTitle.disabled = isDisable;
-        proTitle.value = value
+        proTitle.value = value;
+        if (!isDisable) {
+            proTitle.focus();
+        }
         proTitleContainer.appendChild(proTitle);
 
         const formButton = createActionButton(["todo-button", "edit-project-button"], "none", icon, pID);
@@ -441,6 +473,9 @@ export default function frontend() {
         proTitleContainer.appendChild(formButton);
         proTitleContainer.appendChild(delbutton);
         headerDiv.appendChild(proTitleContainer);
+        if (!isDisable) {
+            proTitle.focus();
+        }
     };
 
     const renderProject = (user, pID) => {
@@ -467,7 +502,12 @@ export default function frontend() {
 
 
     const delProjectName = (pID) => {
-        document.querySelector(`.project-tile[proID="${pID}"]`).remove();
+        const el = document.querySelector(`.project-tile[proID="${pID}"]`);
+        el.classList.remove("sidebar-anim");
+        el.classList.add("reverse-sidebar-anim");
+        el.addEventListener("animationend", function() {
+            el.remove();
+        });
     };
 
     const renderProjectName = (pname, cls, pid = null, icon = projectIcon, widgetCls = "sidebar-widget") => {
@@ -730,7 +770,7 @@ export default function frontend() {
         // parent.classList.add("popup-active");
         parent.appendChild(mbitem);
         // parent.classList.add("popup-active");
-
+        document.getElementById("Title-" + todoID + pID).focus();
     };
 
     const homeRemoveNewTodo = (pID) => {
@@ -768,5 +808,5 @@ export default function frontend() {
         });
     };
 
-    return { fav_icon, loginForm, renderSidebar, updateName, renderProject, editToDo, saveToDo, remToDo, editProject, saveProject, addNewTodo, renderNewTodo, removeNewTodo, addNewProject, renderProjectName, renderHome, delProjectName, homeRenderNewTodo, homeRemoveNewTodo, homeAddNewTodo, homeUpdateTodo, homeRemTodo };
+    return { fav_icon, loginForm, renderSidebar, updateName, renderProject, editToDo, saveToDo, remToDo, editProject, saveProject, addNewTodo, renderNewTodo, removeNewTodo, addNewProject, renderProjectName, renderHome, delProjectName, homeRenderNewTodo, homeRemoveNewTodo, homeAddNewTodo, homeUpdateTodo, homeRemTodo, resetSidebar, selectSidebarItem };
 }

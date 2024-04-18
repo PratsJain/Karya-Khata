@@ -282,7 +282,7 @@ button:hover {
 
 
 .sidebar-anim {
-    animation: sidebar_items var(--anim-dur) ease-in-out var(--anim-delay) 1 both;
+    animation: sidebar_items var(--anim-dur) ease-in-out var(--anim-delay) 1 backwards;
 }
 
 @keyframes sidebar_items {
@@ -309,7 +309,7 @@ button:hover {
 
 
 .topdown-animation {
-    animation: topdowntrans var(--anim-dur) ease-in-out var(--anim-delay) 1 both;
+    animation: topdowntrans var(--anim-dur) ease-in-out var(--anim-delay) 1 backwards;
 }
 
 @keyframes topdowntrans {
@@ -376,9 +376,17 @@ button:hover {
 }
 
 .sidebar-widget, .sidebar-widget-fixed, .name-card, .create-pro {
-    --anim-delay: 100ms;
+    --anim-delay: 0ms;
     --anim-dur: 500ms;
-    --anim-init-pos: -100px;
+    --anim-init-pos: -300px;
+}
+
+.selected {
+    transform: translateX(15px);
+}
+
+.unselected {
+    transform: translateX(0px);
 }
 
 .sidebar-widget:hover {
@@ -460,6 +468,9 @@ button:hover {
     box-shadow: var(--card-shadow);
     padding: 20px;
     overflow: auto;
+    --anim-delay: 100ms;
+    --anim-dur: 500ms;
+    --anim-init-pos: -500px;
 }
 
 .todo-form {
